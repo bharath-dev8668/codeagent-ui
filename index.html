@@ -47,8 +47,12 @@
       z-index: 0;
       background: url('https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/ruixen_moon_2.png') center/cover fixed, #000;
     }
-    
-    .bg-orb, .bg-orb2, .bg-orb3, .bg-grid, .stars {
+
+    .bg-orb,
+    .bg-orb2,
+    .bg-orb3,
+    .bg-grid,
+    .stars {
       display: none !important;
     }
 
@@ -263,8 +267,18 @@
       overflow: hidden;
     }
 
-    .agent-header { flex: 1; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .agent-info { display: flex; flex-direction: column; }
+    .agent-header {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .agent-info {
+      display: flex;
+      flex-direction: column;
+    }
 
     .agent-av {
       width: 42px;
@@ -324,7 +338,7 @@
       box-shadow: 0 0 6px #22c55e;
       animation: sd 2s infinite;
     }
-    
+
     .apill-p::before {
       content: '';
       width: 5px;
@@ -431,18 +445,22 @@
       user-select: none;
       list-style: none;
     }
-    .inst-summary::-webkit-details-marker { display: none; }
-    
+
+    .inst-summary::-webkit-details-marker {
+      display: none;
+    }
+
     .inst-sum-left {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    
+
     .inst-chevron {
       transition: transform 0.2s;
       color: rgba(255, 255, 255, .3);
     }
+
     .inst-details[open] .inst-chevron {
       transform: rotate(180deg);
     }
@@ -496,6 +514,7 @@
       transition: all .2s;
       width: 100%;
     }
+
     .cr-email-btn:hover {
       background: #404040;
       color: #fff;
@@ -1344,40 +1363,124 @@
       }
     }
 
-    @keyframes boltPulse{
-      0%{opacity:.15;transform:scale(.7)}
-      40%{opacity:1;transform:scale(1.08)}
-      60%{opacity:.9;transform:scale(1)}
-      100%{opacity:.15;transform:scale(.7)}
+    @keyframes boltPulse {
+      0% {
+        opacity: .15;
+        transform: scale(.7)
+      }
+
+      40% {
+        opacity: 1;
+        transform: scale(1.08)
+      }
+
+      60% {
+        opacity: .9;
+        transform: scale(1)
+      }
+
+      100% {
+        opacity: .15;
+        transform: scale(.7)
+      }
     }
-    @keyframes glowRing{
-      0%{r:8;opacity:.5;stroke-width:2}
-      100%{r:20;opacity:0;stroke-width:.5}
+
+    @keyframes glowRing {
+      0% {
+        r: 8;
+        opacity: .5;
+        stroke-width: 2
+      }
+
+      100% {
+        r: 20;
+        opacity: 0;
+        stroke-width: .5
+      }
     }
-    @keyframes glowRing2{
-      0%{r:8;opacity:.4;stroke-width:1.5}
-      100%{r:20;opacity:0;stroke-width:.5}
+
+    @keyframes glowRing2 {
+      0% {
+        r: 8;
+        opacity: .4;
+        stroke-width: 1.5
+      }
+
+      100% {
+        r: 20;
+        opacity: 0;
+        stroke-width: .5
+      }
     }
-    @keyframes sparkFly1{
-      0%{opacity:0;transform:translate(0,0) scale(0)}
-      25%{opacity:1;transform:translate(-7px,-9px) scale(1)}
-      100%{opacity:0;transform:translate(-14px,-20px) scale(0)}
+
+    @keyframes sparkFly1 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0)
+      }
+
+      25% {
+        opacity: 1;
+        transform: translate(-7px, -9px) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-14px, -20px) scale(0)
+      }
     }
-    @keyframes sparkFly2{
-      0%{opacity:0;transform:translate(0,0) scale(0)}
-      25%{opacity:1;transform:translate(8px,-10px) scale(1)}
-      100%{opacity:0;transform:translate(18px,-18px) scale(0)}
+
+    @keyframes sparkFly2 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0)
+      }
+
+      25% {
+        opacity: 1;
+        transform: translate(8px, -10px) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(18px, -18px) scale(0)
+      }
     }
-    @keyframes sparkFly3{
-      0%{opacity:0;transform:translate(0,0) scale(0)}
-      25%{opacity:1;transform:translate(-9px,7px) scale(1)}
-      100%{opacity:0;transform:translate(-18px,16px) scale(0)}
+
+    @keyframes sparkFly3 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0)
+      }
+
+      25% {
+        opacity: 1;
+        transform: translate(-9px, 7px) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-18px, 16px) scale(0)
+      }
     }
-    @keyframes sparkFly4{
-      0%{opacity:0;transform:translate(0,0) scale(0)}
-      25%{opacity:1;transform:translate(7px,8px) scale(1)}
-      100%{opacity:0;transform:translate(14px,18px) scale(0)}
+
+    @keyframes sparkFly4 {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0)
+      }
+
+      25% {
+        opacity: 1;
+        transform: translate(7px, 8px) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(14px, 18px) scale(0)
+      }
     }
+
     .kordex-loader {
       display: flex;
       align-items: center;
@@ -1385,13 +1488,41 @@
       flex-shrink: 0;
       position: relative;
     }
-    .kordex-loader .bolt{animation:boltPulse 1.4s ease-in-out infinite;transform-origin:50% 50%}
-    .kordex-loader .ring1{animation:glowRing 1.4s ease-out infinite;transform-origin:50% 50%}
-    .kordex-loader .ring2{animation:glowRing2 1.4s .3s ease-out infinite;transform-origin:50% 50%}
-    .kordex-loader .sp1{animation:sparkFly1 1.4s .35s ease-out infinite;transform-origin:50% 50%}
-    .kordex-loader .sp2{animation:sparkFly2 1.4s .38s ease-out infinite;transform-origin:50% 50%}
-    .kordex-loader .sp3{animation:sparkFly3 1.4s .40s ease-out infinite;transform-origin:50% 50%}
-    .kordex-loader .sp4{animation:sparkFly4 1.4s .42s ease-out infinite;transform-origin:50% 50%}
+
+    .kordex-loader .bolt {
+      animation: boltPulse 1.4s ease-in-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .ring1 {
+      animation: glowRing 1.4s ease-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .ring2 {
+      animation: glowRing2 1.4s .3s ease-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .sp1 {
+      animation: sparkFly1 1.4s .35s ease-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .sp2 {
+      animation: sparkFly2 1.4s .38s ease-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .sp3 {
+      animation: sparkFly3 1.4s .40s ease-out infinite;
+      transform-origin: 50% 50%
+    }
+
+    .kordex-loader .sp4 {
+      animation: sparkFly4 1.4s .42s ease-out infinite;
+      transform-origin: 50% 50%
+    }
 
     .think-info {
       display: flex;
@@ -1720,7 +1851,10 @@
     <div class="agent-identity">
       <div class="agent-header">
         <div class="agent-av">
-          <svg viewBox="0 0 18 18" fill="none" style="width:20px;height:20px"><path d="M10.5 1L4 10h5L7 17L14 8H9L10.5 1Z" fill="#F97316" stroke="#F97316" stroke-width=".5" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 18 18" fill="none" style="width:20px;height:20px">
+            <path d="M10.5 1L4 10h5L7 17L14 8H9L10.5 1Z" fill="#F97316" stroke="#F97316" stroke-width=".5"
+              stroke-linejoin="round" />
+          </svg>
         </div>
         <div class="agent-info">
           <div class="agent-name">KORDEX AI</div>
@@ -1729,7 +1863,7 @@
       </div>
       <div class="agent-pills">
         <span class="apill apill-g">Online</span>
-        <span class="apill apill-p">Groq · llama-3.3-70b</span>
+        <span class="apill apill-p">Groq · llama-4-scout</span>
       </div>
     </div>
 
@@ -1743,8 +1877,13 @@
           <div class="cr-role">Developer &amp; Builder</div>
         </div>
       </div>
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=bharathtommandru1@gmail.com" target="_blank" rel="noopener noreferrer" class="cr-email-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=bharathtommandru1@gmail.com" target="_blank"
+        rel="noopener noreferrer" class="cr-email-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
         Email Bharath
       </a>
     </div>
@@ -1758,10 +1897,14 @@
             <span class="inst-live">LIVE</span>
             Active Instructions
           </div>
-          <svg class="inst-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          <svg class="inst-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
         </summary>
         <div class="inst-box">
-          You're my ruthless mentor. Don't sugarcoat anything. If my idea is weak, call it trash and tell me why. Your job
+          You're my ruthless mentor. Don't sugarcoat anything. If my idea is weak, call it trash and tell me why. Your
+          job
           is to stress-test everything I say until it's bulletproof. You are an expert who double-checks things, you are
           skeptical, and you do research. I am not always right. Neither are you, but we both strive for accuracy. Be
           playful and goofy.
@@ -1798,32 +1941,94 @@
             oninput="homeResize(this)"></textarea>
           <div class="glass-footer">
             <div class="gf-left">
-              <button class="icon-btn" onclick="document.getElementById('fileInput').click()"
-                title="Attach file">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <button class="icon-btn" onclick="document.getElementById('fileInput').click()" title="Attach file">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-paperclip">
+                  <path
+                    d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                </svg>
               </button>
               <div class="input-agent-pill">
-                ⚡ llama-3.3-70b
+                ⚡ llama-4-scout
               </div>
               <input type="file" id="fileInput" multiple
                 accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg"
                 onchange="handleHomeFiles(this)">
             </div>
             <button class="send-btn" onclick="homeSubmit()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-arrow-up">
+                <path d="m5 12 7-7 7 7" />
+                <path d="M12 19V5" />
+              </svg>
             </button>
           </div>
         </div>
 
         <div class="chips-wrap">
-          <div class="chip" onclick="startChat('Generate code to ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg> Generate Code</div>
-          <div class="chip" onclick="startChat('Launch app for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 3.82-13.06 1.34 1.34 0 0 1 2.06 0 22 22 0 0 1 3.82 13.06l-3 3"/><path d="m9 11 4 4"/><path d="m18 6 4-4"/></svg> Launch App</div>
-          <div class="chip" onclick="startChat('Write UI components for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers"><path d="m3 11 9 5 9-5"/><path d="m3 16 9 5 9-5"/><path d="m12 1 9 5-9 5-9-5 9-5z"/></svg> UI Components</div>
-          <div class="chip" onclick="startChat('Give me theme ideas for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Theme Ideas</div>
-          <div class="chip" onclick="startChat('Build user dashboard for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg> User Dashboard</div>
-          <div class="chip" onclick="startChat('Build landing page for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg> Landing Page</div>
-          <div class="chip" onclick="startChat('Process uploaded docs for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-up"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m15 15-3-3-3 3"/></svg> Upload Docs</div>
-          <div class="chip" onclick="startChat('Generate image assets for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg> Image Assets</div>
+          <div class="chip" onclick="startChat('Generate code to ')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+              height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-code-2">
+              <path d="m18 16 4-4-4-4" />
+              <path d="m6 8-4 4 4 4" />
+              <path d="m14.5 4-5 16" />
+            </svg> Generate Code</div>
+          <div class="chip" onclick="startChat('Launch app for ')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+              height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-rocket">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+              <path d="m12 15-3-3a22 22 0 0 1 3.82-13.06 1.34 1.34 0 0 1 2.06 0 22 22 0 0 1 3.82 13.06l-3 3" />
+              <path d="m9 11 4 4" />
+              <path d="m18 6 4-4" />
+            </svg> Launch App</div>
+          <div class="chip" onclick="startChat('Write UI components for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers">
+              <path d="m3 11 9 5 9-5" />
+              <path d="m3 16 9 5 9-5" />
+              <path d="m12 1 9 5-9 5-9-5 9-5z" />
+            </svg> UI Components</div>
+          <div class="chip" onclick="startChat('Give me theme ideas for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+              <path
+                d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+            </svg> Theme Ideas</div>
+          <div class="chip" onclick="startChat('Build user dashboard for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-round">
+              <path d="M18 20a6 6 0 0 0-12 0" />
+              <circle cx="12" cy="10" r="4" />
+              <circle cx="12" cy="12" r="10" />
+            </svg> User Dashboard</div>
+          <div class="chip" onclick="startChat('Build landing page for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor">
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg> Landing Page</div>
+          <div class="chip" onclick="startChat('Process uploaded docs for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-up">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <path d="M12 12v6" />
+              <path d="m15 15-3-3-3 3" />
+            </svg> Upload Docs</div>
+          <div class="chip" onclick="startChat('Generate image assets for ')"><svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image">
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+            </svg> Image Assets</div>
         </div>
       </div>
 
@@ -1845,7 +2050,7 @@
         <div class="ctop-info">
           <div class="ctop-name">KORDEX AI</div>
           <div class="ctop-row">
-            <span class="mpill">⚡ llama-3.3-70b</span>
+            <span class="mpill">⚡ llama-4-scout</span>
             <span class="spill sp-ready" id="spill"><span class="sdot"></span><span id="slabel">Ready</span></span>
           </div>
         </div>
@@ -1898,7 +2103,7 @@
   <script>
     // 👇 PASTE YOUR GROQ KEY HERE
     const GROQ_KEY = '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';
-    const MODEL = 'llama-3.3-70b-versatile';
+    const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
     let busy = false, hist = [], sbOpen = false;
     let homeFiles = [], chatFiles = [];
 
@@ -1959,11 +2164,17 @@
 
     async function readFileText(file) {
       return new Promise(res => {
-        if (file.type.startsWith('image/')) { res(`[Image: ${file.name}]`); return }
-        const r = new FileReader();
-        r.onload = e => res(e.target.result);
-        r.onerror = () => res(`[Could not read: ${file.name}]`);
-        r.readAsText(file);
+        if (file.type.startsWith('image/')) {
+          const r = new FileReader();
+          r.onload = e => res({ type: 'image', data: e.target.result, name: file.name, mime: file.type });
+          r.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
+          r.readAsDataURL(file);
+        } else {
+          const r = new FileReader();
+          r.onload = e => res({ type: 'text', data: e.target.result, name: file.name });
+          r.onerror = () => res({ type: 'text', data: '[Could not read: ' + file.name + ']', name: file.name });
+          r.readAsText(file);
+        }
       });
     }
 
@@ -1972,7 +2183,52 @@
 Identity: Name is KORDEX AI. Built by Bharath Thommandru. Powered by Groq AI.
 Capabilities: Write clean production-ready code in ANY language. Fix bugs with root cause explanation. Refactor code. Explain step-by-step. Best practices. Always mention dependencies.
 Formatting: Fenced code blocks with language tags. Inline \`code\` for names. **bold** for key terms.
-Personality: Ruthless mentor. No sugarcoating. Call weak ideas trash and explain why. Stress-test everything. Skeptical, double-check, research. Playful and goofy while brutally honest.`;
+Personality: Ruthless mentor. No sugarcoating. Call weak ideas trash and explain why. Stress-test everything. Skeptical, double-check, research. Playful and goofy while brutally honest.You are KORDEX AI, a world-class intelligent assistant built by Bharath Thommandru.
+
+IDENTITY:
+- Your name is KORDEX AI
+- Built and created by Bharath Thommandru
+- If anyone asks who made you, who created you, or who built you — always answer: "I was built by Bharath Thommandru"
+- You are powered by Groq AI
+
+CAPABILITIES:
+You can analyze and understand:
+- Images — describe, explain, read text in images, identify objects, UI designs, diagrams, screenshots
+- Code files — read, explain, debug, fix, improve any programming language
+- Text files — summarize, analyze, extract key information
+- PDF documents — read content, answer questions about it
+- CSV/Excel data — analyze data, find patterns, give insights
+- Any uploaded file — always try your best to read and explain it
+
+HOW TO RESPOND:
+- Always be clear and easy to understand
+- If something is complex, break it down step by step
+- Use examples to explain difficult concepts
+- If you are not sure about something, say "I am not 100% sure about this, but here is what I think:" and then explain
+- Never make up facts — if you don't know, say "I don't have enough information about this, can you give me more details?"
+- If the user asks something unclear, ask a simple clarifying question like "Can you tell me more about what you mean?"
+
+DOUBT HANDLING:
+- If user says "I don't understand" → explain it again in simpler words with an example
+- If user says "are you sure?" → double check your answer and either confirm with reasoning or correct yourself
+- If user says "explain more" → go deeper with more detail
+- If user asks "what does this mean?" → give a clear simple definition with a real world example
+- Always end complex explanations with "Does this make sense? Let me know if you need me to clarify anything!"
+
+PERSONALITY:
+- You are a ruthless mentor — no sugarcoating
+- If an idea is weak, say so and explain why
+- Stress test everything until it is bulletproof
+- Be skeptical, double check facts, do research
+- Be playful and goofy while being brutally honest
+- Never be rude, always be helpful
+
+FORMATTING:
+- Use code blocks for all code
+- Use bullet points for lists
+- Use bold for important terms
+- Keep responses clean and readable
+- For long answers, use sections with clear headings`;
 
     // ── HELPERS ──
     function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
@@ -2051,19 +2307,35 @@ Personality: Ruthless mentor. No sugarcoating. Call weak ideas trash and explain
       setSt('Working…', 'sp-busy');
 
       // Read file contents
-      let fileContent = '';
       const fileNames = [];
+      const fileResults = [];
       for (const f of files) {
         const content = await readFileText(f);
         fileNames.push(f.name);
-        fileContent += `\n\n--- File: ${f.name} ---\n${content}`;
+        fileResults.push(content);
       }
 
-      const fullMsg = txt + (fileContent ? '\n' + fileContent : '');
+      // Build content array for vision model
+      const contentParts = [];
+      let textPart = txt || '';
+      for (const fr of fileResults) {
+        if (fr.type === 'image') {
+          contentParts.push({ type: 'image_url', image_url: { url: fr.data } });
+          textPart += (textPart ? '\n' : '') + `[Attached image: ${fr.name}]`;
+        } else {
+          textPart += `\n\n--- File: ${fr.name} ---\n${fr.data}`;
+        }
+      }
+      if (!textPart && fileNames.length) textPart = `Analyze these files: ${fileNames.join(', ')}`;
+      if (textPart) contentParts.unshift({ type: 'text', text: textPart });
+
       const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
 
       addMsg('user', displayMsg || '📎 Files attached', [], fileNames);
-      hist.push({ role: 'user', content: fullMsg || `Analyze these files: ${fileNames.join(', ')}` });
+      // Use content array if there are images, string otherwise
+      const hasImages = fileResults.some(fr => fr.type === 'image');
+      const userContent = hasImages ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
+      hist.push({ role: 'user', content: userContent });
       showThink();
 
       try {

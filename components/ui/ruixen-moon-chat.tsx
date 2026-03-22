@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -86,7 +87,7 @@ export default function RuixenMoonChat() {
           <Textarea
             ref={textareaRef}
             value={message}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               setMessage(e.target.value);
               adjustHeight();
             }}
