@@ -764,7 +764,7 @@
       font-weight: 500;
       pointer-events: none;
       margin-left: 2px;
-      transition: all .3s cubic-bezier(.4,0,.2,1);
+      transition: all .3s cubic-bezier(.4, 0, .2, 1);
       user-select: none;
     }
 
@@ -1023,7 +1023,7 @@
       font-size: 10px;
       font-weight: 600;
       color: rgba(255, 255, 255, .25);
-      transition: all .3s cubic-bezier(.4,0,.2,1);
+      transition: all .3s cubic-bezier(.4, 0, .2, 1);
       user-select: none;
     }
 
@@ -2015,7 +2015,8 @@
                 ⚡ llama-3.3-70b
               </div>
               <div class="input-agent-pill" id="homePill2"
-                onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')" style="pointer-events:auto;cursor:pointer">
+                onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
+                style="pointer-events:auto;cursor:pointer">
                 👁 llama-4-scout
               </div>
               <input type="file" id="fileInput" multiple
@@ -2116,7 +2117,8 @@
         <div class="ctop-info">
           <div class="ctop-name">KORDEX AI</div>
           <div class="ctop-row">
-            <span class="mpill model-active" id="chatPill1" onclick="selectModel('llama-3.3-70b-versatile')" style="cursor:pointer">⚡
+            <span class="mpill model-active" id="chatPill1" onclick="selectModel('llama-3.3-70b-versatile')"
+              style="cursor:pointer">⚡
               llama-3.3-70b</span>
             <span class="mpill" id="chatPill2" onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
               style="cursor:pointer">👁 llama-4-scout</span>
@@ -2260,7 +2262,7 @@
 
     // ── SYSTEM ──
     const SYS = `You are KORDEX AI, a world-class agentic coding assistant built by Bharath Thommandru.
-Identity: Name is KORDEX AI. Built by Bharath Thommandru. Powered by Groq AI.
+Identity: Name is KORDEX AI. Built by Bharath Thommandru.
 Capabilities: Write clean production-ready code in ANY language. Fix bugs with root cause explanation. Refactor code. Explain step-by-step. Best practices. Always mention dependencies.
 Formatting: Fenced code blocks with language tags. Inline \`code\` for names. **bold** for key terms.
 Personality: Ruthless mentor. No sugarcoating. Call weak ideas trash and explain why. Stress-test everything. Skeptical, double-check, research. Playful and goofy while brutally honest.You are KORDEX AI, a world-class intelligent assistant built by Bharath Thommandru.
@@ -2269,7 +2271,6 @@ IDENTITY:
 - Your name is KORDEX AI
 - Built and created by Bharath Thommandru
 - If anyone asks who made you, who created you, or who built you — always answer: "I was built by Bharath Thommandru"
-- You are powered by Groq AI
 
 CAPABILITIES:
 You can analyze and understand:
