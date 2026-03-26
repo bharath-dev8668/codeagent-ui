@@ -754,16 +754,36 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 0 10px;
-      height: 26px;
+      padding: 0 12px;
+      height: 28px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #404040;
-      color: #a3a3a3;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, .08);
+      color: rgba(255, 255, 255, .3);
       font-size: 11.5px;
       font-weight: 500;
       pointer-events: none;
       margin-left: 2px;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      user-select: none;
+    }
+
+    .input-agent-pill.model-active {
+      background: rgba(168, 85, 247, .15);
+      border-color: rgba(168, 85, 247, .45);
+      color: #e2d0ff;
+      box-shadow: 0 0 12px rgba(168, 85, 247, .2), inset 0 0 8px rgba(168, 85, 247, .06);
+    }
+
+    .input-agent-pill:hover {
+      background: rgba(168, 85, 247, .1);
+      border-color: rgba(168, 85, 247, .3);
+      color: rgba(255, 255, 255, .7);
+      transform: scale(1.04);
+    }
+
+    .input-agent-pill:active {
+      transform: scale(.96);
     }
 
     /* Hidden file input */
@@ -996,13 +1016,33 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: rgba(255, 255, 255, .05);
-      border: 1px solid rgba(255, 255, 255, .07);
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 99px;
-      padding: 2px 9px;
+      padding: 3px 10px;
       font-size: 10px;
       font-weight: 600;
-      color: rgba(255, 255, 255, .28);
+      color: rgba(255, 255, 255, .25);
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      user-select: none;
+    }
+
+    .mpill.model-active {
+      background: rgba(168, 85, 247, .12);
+      border-color: rgba(168, 85, 247, .4);
+      color: #d4b5ff;
+      box-shadow: 0 0 10px rgba(168, 85, 247, .18);
+    }
+
+    .mpill:hover {
+      background: rgba(168, 85, 247, .1);
+      border-color: rgba(168, 85, 247, .3);
+      color: rgba(255, 255, 255, .65);
+      transform: scale(1.05);
+    }
+
+    .mpill:active {
+      transform: scale(.94);
     }
 
     .spill {
@@ -1817,6 +1857,27 @@
         gap: 3px;
         align-items: center
       }
+
+      .ctop-row {
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .mpill {
+        font-size: 9px;
+        padding: 2px 8px;
+      }
+
+      .gf-left {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .input-agent-pill {
+        font-size: 10.5px;
+        height: 26px;
+        padding: 0 10px;
+      }
     }
   </style>
 </head>
@@ -1863,7 +1924,7 @@
       </div>
       <div class="agent-pills">
         <span class="apill apill-g">Online</span>
-        <span class="apill apill-p">Groq · llama-3.3-70b</span>
+        <span class="apill apill-p">Groq · Dual Model</span>
       </div>
     </div>
 
@@ -1949,8 +2010,13 @@
                     d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                 </svg>
               </button>
-              <div class="input-agent-pill">
+              <div class="input-agent-pill model-active" id="homePill1" onclick="selectModel('llama-3.3-70b-versatile')"
+                style="pointer-events:auto;cursor:pointer">
                 ⚡ llama-3.3-70b
+              </div>
+              <div class="input-agent-pill" id="homePill2"
+                onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')" style="pointer-events:auto;cursor:pointer">
+                👁 llama-4-scout
               </div>
               <input type="file" id="fileInput" multiple
                 accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg"
@@ -2050,7 +2116,10 @@
         <div class="ctop-info">
           <div class="ctop-name">KORDEX AI</div>
           <div class="ctop-row">
-            <span class="mpill">⚡ llama-3.3-70b</span>
+            <span class="mpill model-active" id="chatPill1" onclick="selectModel('llama-3.3-70b-versatile')" style="cursor:pointer">⚡
+              llama-3.3-70b</span>
+            <span class="mpill" id="chatPill2" onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
+              style="cursor:pointer">👁 llama-4-scout</span>
             <span class="spill sp-ready" id="spill"><span class="sdot"></span><span id="slabel">Ready</span></span>
           </div>
         </div>
@@ -2103,9 +2172,20 @@
   <script>
     // 👇 PASTE YOUR GROQ KEY HERE
     const GROQ_KEY = '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';
-    const MODEL = 'llama-3.3-70b-versatile';
+    let MODEL = 'llama-3.3-70b-versatile';
     let busy = false, hist = [], sbOpen = false;
     let homeFiles = [], chatFiles = [];
+
+    // ── MODEL SWITCHER ──
+    function selectModel(m) {
+      MODEL = m;
+      const isLlama = m === 'llama-3.3-70b-versatile';
+      // Toggle active class
+      document.getElementById('homePill1').classList.toggle('model-active', isLlama);
+      document.getElementById('homePill2').classList.toggle('model-active', !isLlama);
+      document.getElementById('chatPill1').classList.toggle('model-active', isLlama);
+      document.getElementById('chatPill2').classList.toggle('model-active', !isLlama);
+    }
 
     // ── STARS ──
     (function () {
@@ -2357,7 +2437,7 @@ FORMATTING:
         addMsg('agent', reply, tools); setSt('Ready', 'sp-ready');
       } catch (err) {
         clearInterval(window._tt); document.getElementById('tm')?.remove();
-        addMsg('agent', `❌ **Error:** ${err.message}\n\nCheck your Groq API key.`); setSt('Error', 'sp-err');
+        addMsg('agent', `❌ **Error:** ${err.message}\n\nTHIS AGENT CANNOT READ IMAGES TRY ANOTHER MODEL.`); setSt('Error', 'sp-err');
       }
       busy = false; document.getElementById('csend').disabled = false;
     }
