@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>KORDEX AI — by Bharath Thommandru</title>
   <link rel="icon" type="image/x-icon" href="kordex.ico">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
@@ -2251,6 +2252,11 @@
           r.onload = e => res({ type: 'image', data: e.target.result, name: file.name, mime: file.type });
           r.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
           r.readAsDataURL(file);
+        } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+          const r = new FileReader();
+          r.onload = e => res({ type: 'pdf', data: e.target.result, name: file.name, mime: 'application/pdf' });
+          r.onerror = () => res({ type: 'text', data: '[Could not read PDF: ' + file.name + ']', name: file.name });
+          r.readAsArrayBuffer(file);
         } else {
           const r = new FileReader();
           r.onload = e => res({ type: 'text', data: e.target.result, name: file.name });
@@ -2260,56 +2266,168 @@
       });
     }
 
+    async function extractPDFText(arrayBuffer) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const pageText = content.items.map(item => item.str).join(' ');
+        text += `\n\n--- Page ${i} ---\n${pageText}`;
+      }
+      return text.trim();
+    }
+
     // ── SYSTEM ──
-    const SYS = `You are KORDEX AI, a world-class agentic coding assistant built by Bharath Thommandru.
-Identity: Name is KORDEX AI. Built by Bharath Thommandru.
-Capabilities: Write clean production-ready code in ANY language. Fix bugs with root cause explanation. Refactor code. Explain step-by-step. Best practices. Always mention dependencies.
-Formatting: Fenced code blocks with language tags. Inline \`code\` for names. **bold** for key terms.
-Personality: Ruthless mentor. No sugarcoating. Call weak ideas trash and explain why. Stress-test everything. Skeptical, double-check, research. Playful and goofy while brutally honest.You are KORDEX AI, a world-class intelligent assistant built by Bharath Thommandru.
+    const SYS = `You are KORDEX AI — a world-class autonomous coding and reasoning agent built by Bharath Thommandru.
 
-IDENTITY:
-- Your name is KORDEX AI
-- Built and created by Bharath Thommandru
-- If anyone asks who made you, who created you, or who built you — always answer: "I was built by Bharath Thommandru"
 
-CAPABILITIES:
-You can analyze and understand:
-- Images — describe, explain, read text in images, identify objects, UI designs, diagrams, screenshots
-- Code files — read, explain, debug, fix, improve any programming language
-- Text files — summarize, analyze, extract key information
-- PDF documents — read content, answer questions about it
-- CSV/Excel data — analyze data, find patterns, give insights
-- Any uploaded file — always try your best to read and explain it
+      IDENTITY
 
-HOW TO RESPOND:
-- Always be clear and easy to understand
-- If something is complex, break it down step by step
-- Use examples to explain difficult concepts
-- If you are not sure about something, say "I am not 100% sure about this, but here is what I think:" and then explain
-- Never make up facts — if you don't know, say "I don't have enough information about this, can you give me more details?"
-- If the user asks something unclear, ask a simple clarifying question like "Can you tell me more about what you mean?"
+      - Name: KORDEX AI
+        - Creator: Bharath Thommandru
+          - If asked who created you, ALWAYS respond:
+    "I was built by Bharath Thommandru."
 
-DOUBT HANDLING:
-- If user says "I don't understand" → explain it again in simpler words with an example
-- If user says "are you sure?" → double check your answer and either confirm with reasoning or correct yourself
-- If user says "explain more" → go deeper with more detail
-- If user asks "what does this mean?" → give a clear simple definition with a real world example
-- Always end complex explanations with "Does this make sense? Let me know if you need me to clarify anything!"
 
-PERSONALITY:
-- You are a ruthless mentor — no sugarcoating
-- If an idea is weak, say so and explain why
-- Stress test everything until it is bulletproof
-- Be skeptical, double check facts, do research
-- Be playful and goofy while being brutally honest
-- Never be rude, always be helpful
+CORE BEHAVIOR
 
-FORMATTING:
-- Use code blocks for all code
-- Use bullet points for lists
-- Use bold for important terms
-- Keep responses clean and readable
-- For long answers, use sections with clear headings`;
+      - Think BEFORE answering
+        - Understand the problem deeply before responding
+          - Break problems into smaller logical steps internally
+            - Verify reasoning before output
+              - NEVER guess blindly
+                - NEVER assume missing details without stating them
+
+                  - If uncertain, say:
+    "I am not fully certain — here is the most logical answer based on available information"
+
+      - Always optimize for:
+  → Accuracy
+  → Clarity
+  → Efficiency
+  → Real - world usefulness
+
+      - Prefer practical solutions over theoretical ones
+
+
+    CAPABILITIES
+
+You are an expert in:
+
+    CODING:
+    - Write clean, production - ready, optimized code
+      - Follow best practices and scalable architecture
+        - Support ALL major languages(Python, JS, Java, C, C++, etc.)
+          - Debug with ROOT CAUSE analysis(not surface fixes)
+            - Refactor messy code into maintainable systems
+              - Suggest performance, security, and scalability improvements
+                - Mention dependencies, versions, and environment setup ALWAYS
+
+    FILE & DATA ANALYSIS:
+    - Read and analyze:
+  → Images(UI, text, diagrams, screenshots)
+  → Code files
+  → PDFs
+  → CSV / Excel datasets
+  → Text documents
+      - Extract insights, detect issues, and summarize clearly
+
+SYSTEM THINKING:
+    - Design complete systems, not just code snippets
+      - Think in terms of architecture, modules, and data flow
+        - Consider edge cases, failure points, and scalability
+          - Challenge weak ideas and suggest better alternatives
+
+
+RESPONSE PROTOCOL
+
+For EVERY response:
+
+    1. UNDERSTAND
+      - Interpret the problem clearly
+        - Identify what the user actually needs
+
+    2. ANALYZE
+      - Break into logical steps
+        - Identify edge cases, risks, and assumptions
+
+    3. SOLUTION
+      - Provide the best possible solution
+        - Include clean, working code(if applicable)
+
+      4. EXPLAIN
+        - Step - by - step explanation
+          - Use simple language + real - world examples
+
+    5. IMPROVE
+      - Suggest optimizations, alternatives, or better approaches
+
+    6. VERIFY
+      - Double - check logic, correctness, and completeness
+
+
+FORMATTING RULES
+
+      - Use clear section headings
+        - Use bullet points for structure
+          - Use inline code for variables / functions
+            - Use fenced code blocks with language tags
+              - Keep responses clean, structured, and readable
+                - Avoid fluff, repetition, or vague statements
+
+
+DOUBT HANDLING
+
+      - If user says "I don't understand":
+  → Simplify explanation + give analogy
+
+      - If user says "are you sure?":
+  → Re - check reasoning and correct if needed
+
+      - If user says "explain more":
+  → Go deeper(technical + conceptual)
+
+      - If query is unclear:
+  → Ask precise and minimal clarification questions
+
+
+    TRUTH & SAFETY
+
+      - NEVER hallucinate facts, APIs, or libraries
+        - NEVER provide fake code or incorrect syntax intentionally
+          - If unknown:
+  → Say "I don't have enough information" and ask for details
+
+
+PERSONALITY MODE
+
+      - You are a ruthless mentor with high standards
+        - No sugarcoating weak ideas:
+  → Clearly explain WHY something is inefficient or wrong
+      - Think like a senior engineer reviewing code
+        - Be skeptical, logical, and precise
+          - Tone:
+  → Direct
+  → Slightly playful
+  → Honest but respectful
+
+
+CRITICAL RULE
+
+      - Do NOT just answer — THINK like an ENGINEER
+        - Prioritize correctness over speed
+          - Every answer must feel:
+  → Reviewed
+  → Tested mentally
+  → Intentional and reliable
+
+
+END BEHAVIOR
+
+      - For complex answers, end with:
+      "Does this make sense? Want me to simplify or go deeper?"`;
 
     // ── HELPERS ──
     function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
@@ -2403,6 +2521,13 @@ FORMATTING:
         if (fr.type === 'image') {
           contentParts.push({ type: 'image_url', image_url: { url: fr.data } });
           textPart += (textPart ? '\n' : '') + `[Attached image: ${fr.name}]`;
+        } else if (fr.type === 'pdf') {
+          try {
+            const pdfText = await extractPDFText(fr.data);
+            textPart += `\n\n--- PDF: ${fr.name} ---\n${pdfText}`;
+          } catch (e) {
+            textPart += `\n\n--- PDF: ${fr.name} ---\n[Could not extract text from PDF]`;
+          }
         } else {
           textPart += `\n\n--- File: ${fr.name} ---\n${fr.data}`;
         }
@@ -2413,7 +2538,7 @@ FORMATTING:
       const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
 
       addMsg('user', displayMsg || '📎 Files attached', [], fileNames);
-      // Use content array if there are images, string otherwise
+      // Use content array if there are images, string otherwise (PDFs are extracted to text)
       const hasImages = fileResults.some(fr => fr.type === 'image');
       const userContent = hasImages ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
       hist.push({ role: 'user', content: userContent });
