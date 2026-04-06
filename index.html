@@ -1908,77 +1908,115 @@
       transform: scale(1.08)
     }
 
-    /* RESPONSIVE */
+    /* ══ RESPONSIVE — ALL SCREENS ══ */
+
+    /* Small phones */
+    @media(max-width:380px) {
+      .home-title { font-size: 26px }
+      .home-sub { font-size: 13px }
+      .home-input-wrap { margin-top: clamp(150px, 28vh, 200px) }
+      .chip { padding: 7px 12px; font-size: 11px }
+      .home-author { font-size: 10px; padding: 5px 11px }
+      .ctop { padding: 9px 10px; gap: 8px }
+      .ctop-name { font-size: 12px }
+      .mpill { font-size: 8px; padding: 2px 6px }
+      .spill { font-size: 8px; padding: 2px 6px }
+      .chat-msgs { padding: 10px; gap: 10px }
+      .mbody { max-width: 92% }
+      .bubble { padding: 10px 11px; font-size: 12px }
+      .ciarea { padding: 6px 10px 10px }
+      .cchip { padding: 4px 10px; font-size: 10px }
+      .cfoot { flex-direction: column; gap: 2px; align-items: center }
+      .gf-left { flex-wrap: wrap; gap: 3px }
+      .input-agent-pill { font-size: 9.5px; height: 24px; padding: 0 8px }
+      .sidebar { width: 260px }
+      :root { --sb: 260px }
+    }
+
+    /* Phones */
     @media(max-width:600px) {
       .aurora { filter: blur(40px); opacity: .7 }
       .aurora2 { filter: blur(60px); opacity: .5 }
       .bg-grid { background-size: 50px 50px }
       .beam { height: 100px }
-      .home-title {
-        font-size: 32px
-      }
+      .home-title { font-size: 32px }
+      .home-input-wrap { margin-top: clamp(170px, 32vh, 240px) }
+      .chips-wrap { gap: 8px }
+      .chip { padding: 8px 14px; font-size: 12px }
+      .ctop { padding: 11px 14px }
+      .ciarea { padding: 8px 14px 14px }
+      .chat-msgs { padding: 14px; gap: 14px }
+      .mbody { max-width: 88% }
+      .bubble { padding: 11px 13px; font-size: 13px }
+      .cfoot { flex-direction: column; gap: 3px; align-items: center }
+      .ctop-row { gap: 4px; flex-wrap: wrap }
+      .mpill { font-size: 9px; padding: 2px 8px }
+      .gf-left { flex-wrap: wrap; gap: 4px }
+      .input-agent-pill { font-size: 10.5px; height: 26px; padding: 0 10px }
+    }
 
-      .home-input-wrap {
-        margin-top: clamp(170px, 32vh, 240px)
-      }
+    /* Tablets */
+    @media(min-width:601px) and (max-width:1024px) {
+      .home-title { font-size: clamp(36px, 5vw, 40px) }
+      .home-sub { font-size: clamp(14px, 2vw, 15px) }
+      .home-input-wrap { max-width: 640px }
+      .chips-wrap { max-width: 640px }
+      .chip { padding: 9px 16px; font-size: 12.5px }
+      .chat-msgs { padding: 18px }
+      .mbody { max-width: min(72%, 520px) }
+      .bubble { padding: 12px 15px; font-size: 13.5px }
+      .ctop { padding: 12px 16px }
+      .ciarea { padding: 10px 16px 14px }
+    }
 
-      .chips-wrap {
-        gap: 8px
-      }
+    /* Laptops */
+    @media(min-width:1025px) and (max-width:1440px) {
+      .home-input-wrap { max-width: 700px }
+      .chips-wrap { max-width: 700px }
+    }
 
-      .chip {
-        padding: 8px 14px;
-        font-size: 12px
-      }
+    /* Large desktops */
+    @media(min-width:1441px) {
+      .home-title { font-size: clamp(42px, 4vw, 56px) }
+      .home-sub { font-size: clamp(16px, 1.5vw, 20px) }
+      .home-input-wrap { max-width: 820px }
+      .chips-wrap { max-width: 820px }
+      .chip { padding: 10px 20px; font-size: 13px }
+      .chat-msgs { padding: 24px }
+      .mbody { max-width: min(70%, 640px) }
+      .bubble { padding: 14px 18px; font-size: 14.5px }
+      .ctop { padding: 14px 24px }
+      .ciarea { padding: 12px 24px 18px }
+      .bg-grid { background-size: 100px 100px }
+    }
 
-      .ctop {
-        padding: 11px 14px
-      }
+    /* Ultrawide / 4K */
+    @media(min-width:2560px) {
+      .home-title { font-size: clamp(52px, 3vw, 72px) }
+      .home-sub { font-size: clamp(18px, 1.2vw, 24px) }
+      .home-input-wrap { max-width: 1000px }
+      .chips-wrap { max-width: 1000px }
+      .chip { padding: 12px 24px; font-size: 15px }
+      .bg-grid { background-size: 120px 120px }
+      .bubble { font-size: 16px; padding: 16px 20px }
+    }
 
-      .ciarea {
-        padding: 8px 14px 14px
-      }
+    /* Landscape phones */
+    @media(max-height:500px) and (orientation:landscape) {
+      .home { padding: 0 16px 4vh }
+      .home-text { margin-top: 10px }
+      .home-title { font-size: 24px; margin-bottom: 4px }
+      .home-sub { font-size: 12px }
+      .home-input-wrap { margin-top: 10px }
+      .chips-wrap { margin-top: 10px; gap: 6px }
+      .chip { padding: 6px 12px; font-size: 11px }
+      .home-author { margin-top: 12px }
+    }
 
-      .chat-msgs {
-        padding: 14px;
-        gap: 14px
-      }
-
-      .mbody {
-        max-width: 88%
-      }
-
-      .bubble {
-        padding: 11px 13px;
-        font-size: 13px
-      }
-
-      .cfoot {
-        flex-direction: column;
-        gap: 3px;
-        align-items: center
-      }
-
-      .ctop-row {
-        gap: 4px;
-        flex-wrap: wrap;
-      }
-
-      .mpill {
-        font-size: 9px;
-        padding: 2px 8px;
-      }
-
-      .gf-left {
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-
-      .input-agent-pill {
-        font-size: 10.5px;
-        height: 26px;
-        padding: 0 10px;
-      }
+    /* Foldable / dual-screen */
+    @media(min-width:280px) and (max-width:500px) and (min-height:600px) and (max-height:800px) {
+      .home-input-wrap { margin-top: clamp(140px, 25vh, 200px) }
+      .home-title { font-size: 28px }
     }
   </style>
 </head>
