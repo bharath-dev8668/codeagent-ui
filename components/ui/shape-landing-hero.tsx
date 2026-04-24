@@ -89,7 +89,7 @@ function HeroGeometric({
             transition: {
                 duration: 1,
                 delay: 0.5 + i * 0.2,
-                ease: [0.21, 0.47, 0.32, 0.98] as const,
+                ease: [0.25, 0.4, 0.25, 1] as const,
             },
         }),
     };
