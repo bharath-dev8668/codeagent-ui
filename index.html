@@ -54,7 +54,7 @@
     .aurora {
       position: absolute;
       inset: -50%;
-      background: 
+      background:
         radial-gradient(ellipse 80% 50% at 20% 40%, rgba(124, 58, 237, .35) 0%, transparent 60%),
         radial-gradient(ellipse 60% 70% at 75% 30%, rgba(59, 130, 246, .25) 0%, transparent 55%),
         radial-gradient(ellipse 70% 50% at 50% 80%, rgba(168, 85, 247, .3) 0%, transparent 60%),
@@ -67,7 +67,7 @@
     .aurora2 {
       position: absolute;
       inset: -50%;
-      background: 
+      background:
         radial-gradient(ellipse 70% 60% at 60% 20%, rgba(139, 92, 246, .25) 0%, transparent 55%),
         radial-gradient(ellipse 80% 50% at 30% 70%, rgba(6, 182, 212, .2) 0%, transparent 60%),
         radial-gradient(ellipse 60% 80% at 80% 60%, rgba(192, 132, 252, .2) 0%, transparent 50%);
@@ -77,16 +77,35 @@
     }
 
     @keyframes auroraFlow {
-      0% { transform: translate(0, 0) rotate(0deg) scale(1) }
-      33% { transform: translate(8%, -5%) rotate(3deg) scale(1.05) }
-      66% { transform: translate(-5%, 8%) rotate(-2deg) scale(.95) }
-      100% { transform: translate(3%, -3%) rotate(1deg) scale(1.02) }
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1)
+      }
+
+      33% {
+        transform: translate(8%, -5%) rotate(3deg) scale(1.05)
+      }
+
+      66% {
+        transform: translate(-5%, 8%) rotate(-2deg) scale(.95)
+      }
+
+      100% {
+        transform: translate(3%, -3%) rotate(1deg) scale(1.02)
+      }
     }
 
     @keyframes auroraFlow2 {
-      0% { transform: translate(0, 0) rotate(0deg) scale(1.05) }
-      50% { transform: translate(-10%, 6%) rotate(-4deg) scale(.95) }
-      100% { transform: translate(6%, -8%) rotate(3deg) scale(1) }
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1.05)
+      }
+
+      50% {
+        transform: translate(-10%, 6%) rotate(-4deg) scale(.95)
+      }
+
+      100% {
+        transform: translate(6%, -8%) rotate(3deg) scale(1)
+      }
     }
 
     /* Animated mesh grid */
@@ -104,8 +123,13 @@
     }
 
     @keyframes gridDrift {
-      0% { transform: translate(0, 0) }
-      100% { transform: translate(80px, 80px) }
+      0% {
+        transform: translate(0, 0)
+      }
+
+      100% {
+        transform: translate(80px, 80px)
+      }
     }
 
     /* Floating particles */
@@ -125,10 +149,23 @@
     }
 
     @keyframes floatUp {
-      0% { opacity: 0; transform: translateY(100vh) scale(0) }
-      10% { opacity: var(--op) }
-      90% { opacity: var(--op) }
-      100% { opacity: 0; transform: translateY(-20vh) scale(1) }
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0)
+      }
+
+      10% {
+        opacity: var(--op)
+      }
+
+      90% {
+        opacity: var(--op)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) scale(1)
+      }
     }
 
     /* Geometric shapes */
@@ -164,10 +201,24 @@
     }
 
     @keyframes geoFloat {
-      0%, 100% { opacity: 0; transform: translateY(0) rotate(0deg) scale(.8) }
-      15% { opacity: var(--gop) }
-      85% { opacity: var(--gop) }
-      50% { transform: translateY(var(--gmove)) rotate(var(--grot)) scale(1) }
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg) scale(.8)
+      }
+
+      15% {
+        opacity: var(--gop)
+      }
+
+      85% {
+        opacity: var(--gop)
+      }
+
+      50% {
+        transform: translateY(var(--gmove)) rotate(var(--grot)) scale(1)
+      }
     }
 
     /* Light beams */
@@ -189,10 +240,23 @@
     }
 
     @keyframes beamFall {
-      0% { opacity: 0; transform: translateY(-150px) rotate(var(--brot)) }
-      10% { opacity: .6 }
-      90% { opacity: .6 }
-      100% { opacity: 0; transform: translateY(100vh) rotate(var(--brot)) }
+      0% {
+        opacity: 0;
+        transform: translateY(-150px) rotate(var(--brot))
+      }
+
+      10% {
+        opacity: .6
+      }
+
+      90% {
+        opacity: .6
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(var(--brot))
+      }
     }
 
     /* Pulse rings from center */
@@ -217,8 +281,17 @@
     }
 
     @keyframes pringExpand {
-      0% { width: 0; height: 0; opacity: .5 }
-      100% { width: var(--pmax); height: var(--pmax); opacity: 0 }
+      0% {
+        width: 0;
+        height: 0;
+        opacity: .5
+      }
+
+      100% {
+        width: var(--pmax);
+        height: var(--pmax);
+        opacity: 0
+      }
     }
 
     /* Nebula dots */
@@ -238,8 +311,17 @@
     }
 
     @keyframes nebulaPulse {
-      0%, 100% { opacity: .2; transform: scale(.8) }
-      50% { opacity: .7; transform: scale(1.2) }
+
+      0%,
+      100% {
+        opacity: .2;
+        transform: scale(.8)
+      }
+
+      50% {
+        opacity: .7;
+        transform: scale(1.2)
+      }
     }
 
     /* Vignette overlay */
@@ -1912,111 +1994,368 @@
 
     /* Small phones */
     @media(max-width:380px) {
-      .home-title { font-size: 26px }
-      .home-sub { font-size: 13px }
-      .home-input-wrap { margin-top: clamp(150px, 28vh, 200px) }
-      .chip { padding: 7px 12px; font-size: 11px }
-      .home-author { font-size: 10px; padding: 5px 11px }
-      .ctop { padding: 9px 10px; gap: 8px }
-      .ctop-name { font-size: 12px }
-      .mpill { font-size: 8px; padding: 2px 6px }
-      .spill { font-size: 8px; padding: 2px 6px }
-      .chat-msgs { padding: 10px; gap: 10px }
-      .mbody { max-width: 92% }
-      .bubble { padding: 10px 11px; font-size: 12px }
-      .ciarea { padding: 6px 10px 10px }
-      .cchip { padding: 4px 10px; font-size: 10px }
-      .cfoot { flex-direction: column; gap: 2px; align-items: center }
-      .gf-left { flex-wrap: wrap; gap: 3px }
-      .input-agent-pill { font-size: 9.5px; height: 24px; padding: 0 8px }
-      .sidebar { width: 260px }
-      :root { --sb: 260px }
+      .home-title {
+        font-size: 26px
+      }
+
+      .home-sub {
+        font-size: 13px
+      }
+
+      .home-input-wrap {
+        margin-top: clamp(150px, 28vh, 200px)
+      }
+
+      .chip {
+        padding: 7px 12px;
+        font-size: 11px
+      }
+
+      .home-author {
+        font-size: 10px;
+        padding: 5px 11px
+      }
+
+      .ctop {
+        padding: 9px 10px;
+        gap: 8px
+      }
+
+      .ctop-name {
+        font-size: 12px
+      }
+
+      .mpill {
+        font-size: 8px;
+        padding: 2px 6px
+      }
+
+      .spill {
+        font-size: 8px;
+        padding: 2px 6px
+      }
+
+      .chat-msgs {
+        padding: 10px;
+        gap: 10px
+      }
+
+      .mbody {
+        max-width: 92%
+      }
+
+      .bubble {
+        padding: 10px 11px;
+        font-size: 12px
+      }
+
+      .ciarea {
+        padding: 6px 10px 10px
+      }
+
+      .cchip {
+        padding: 4px 10px;
+        font-size: 10px
+      }
+
+      .cfoot {
+        flex-direction: column;
+        gap: 2px;
+        align-items: center
+      }
+
+      .gf-left {
+        flex-wrap: wrap;
+        gap: 3px
+      }
+
+      .input-agent-pill {
+        font-size: 9.5px;
+        height: 24px;
+        padding: 0 8px
+      }
+
+      .sidebar {
+        width: 260px
+      }
+
+      :root {
+        --sb: 260px
+      }
     }
 
     /* Phones */
     @media(max-width:600px) {
-      .aurora { filter: blur(40px); opacity: .7 }
-      .aurora2 { filter: blur(60px); opacity: .5 }
-      .bg-grid { background-size: 50px 50px }
-      .beam { height: 100px }
-      .home-title { font-size: 32px }
-      .home-input-wrap { margin-top: clamp(170px, 32vh, 240px) }
-      .chips-wrap { gap: 8px }
-      .chip { padding: 8px 14px; font-size: 12px }
-      .ctop { padding: 11px 14px }
-      .ciarea { padding: 8px 14px 14px }
-      .chat-msgs { padding: 14px; gap: 14px }
-      .mbody { max-width: 88% }
-      .bubble { padding: 11px 13px; font-size: 13px }
-      .cfoot { flex-direction: column; gap: 3px; align-items: center }
-      .ctop-row { gap: 4px; flex-wrap: wrap }
-      .mpill { font-size: 9px; padding: 2px 8px }
-      .gf-left { flex-wrap: wrap; gap: 4px }
-      .input-agent-pill { font-size: 10.5px; height: 26px; padding: 0 10px }
+      .aurora {
+        filter: blur(40px);
+        opacity: .7
+      }
+
+      .aurora2 {
+        filter: blur(60px);
+        opacity: .5
+      }
+
+      .bg-grid {
+        background-size: 50px 50px
+      }
+
+      .beam {
+        height: 100px
+      }
+
+      .home-title {
+        font-size: 32px
+      }
+
+      .home-input-wrap {
+        margin-top: clamp(170px, 32vh, 240px)
+      }
+
+      .chips-wrap {
+        gap: 8px
+      }
+
+      .chip {
+        padding: 8px 14px;
+        font-size: 12px
+      }
+
+      .ctop {
+        padding: 11px 14px
+      }
+
+      .ciarea {
+        padding: 8px 14px 14px
+      }
+
+      .chat-msgs {
+        padding: 14px;
+        gap: 14px
+      }
+
+      .mbody {
+        max-width: 88%
+      }
+
+      .bubble {
+        padding: 11px 13px;
+        font-size: 13px
+      }
+
+      .cfoot {
+        flex-direction: column;
+        gap: 3px;
+        align-items: center
+      }
+
+      .ctop-row {
+        gap: 4px;
+        flex-wrap: wrap
+      }
+
+      .mpill {
+        font-size: 9px;
+        padding: 2px 8px
+      }
+
+      .gf-left {
+        flex-wrap: wrap;
+        gap: 4px
+      }
+
+      .input-agent-pill {
+        font-size: 10.5px;
+        height: 26px;
+        padding: 0 10px
+      }
     }
 
     /* Tablets */
     @media(min-width:601px) and (max-width:1024px) {
-      .home-title { font-size: clamp(36px, 5vw, 40px) }
-      .home-sub { font-size: clamp(14px, 2vw, 15px) }
-      .home-input-wrap { max-width: 640px }
-      .chips-wrap { max-width: 640px }
-      .chip { padding: 9px 16px; font-size: 12.5px }
-      .chat-msgs { padding: 18px }
-      .mbody { max-width: min(72%, 520px) }
-      .bubble { padding: 12px 15px; font-size: 13.5px }
-      .ctop { padding: 12px 16px }
-      .ciarea { padding: 10px 16px 14px }
+      .home-title {
+        font-size: clamp(36px, 5vw, 40px)
+      }
+
+      .home-sub {
+        font-size: clamp(14px, 2vw, 15px)
+      }
+
+      .home-input-wrap {
+        max-width: 640px
+      }
+
+      .chips-wrap {
+        max-width: 640px
+      }
+
+      .chip {
+        padding: 9px 16px;
+        font-size: 12.5px
+      }
+
+      .chat-msgs {
+        padding: 18px
+      }
+
+      .mbody {
+        max-width: min(72%, 520px)
+      }
+
+      .bubble {
+        padding: 12px 15px;
+        font-size: 13.5px
+      }
+
+      .ctop {
+        padding: 12px 16px
+      }
+
+      .ciarea {
+        padding: 10px 16px 14px
+      }
     }
 
     /* Laptops */
     @media(min-width:1025px) and (max-width:1440px) {
-      .home-input-wrap { max-width: 700px }
-      .chips-wrap { max-width: 700px }
+      .home-input-wrap {
+        max-width: 700px
+      }
+
+      .chips-wrap {
+        max-width: 700px
+      }
     }
 
     /* Large desktops */
     @media(min-width:1441px) {
-      .home-title { font-size: clamp(42px, 4vw, 56px) }
-      .home-sub { font-size: clamp(16px, 1.5vw, 20px) }
-      .home-input-wrap { max-width: 820px }
-      .chips-wrap { max-width: 820px }
-      .chip { padding: 10px 20px; font-size: 13px }
-      .chat-msgs { padding: 24px }
-      .mbody { max-width: min(70%, 640px) }
-      .bubble { padding: 14px 18px; font-size: 14.5px }
-      .ctop { padding: 14px 24px }
-      .ciarea { padding: 12px 24px 18px }
-      .bg-grid { background-size: 100px 100px }
+      .home-title {
+        font-size: clamp(42px, 4vw, 56px)
+      }
+
+      .home-sub {
+        font-size: clamp(16px, 1.5vw, 20px)
+      }
+
+      .home-input-wrap {
+        max-width: 820px
+      }
+
+      .chips-wrap {
+        max-width: 820px
+      }
+
+      .chip {
+        padding: 10px 20px;
+        font-size: 13px
+      }
+
+      .chat-msgs {
+        padding: 24px
+      }
+
+      .mbody {
+        max-width: min(70%, 640px)
+      }
+
+      .bubble {
+        padding: 14px 18px;
+        font-size: 14.5px
+      }
+
+      .ctop {
+        padding: 14px 24px
+      }
+
+      .ciarea {
+        padding: 12px 24px 18px
+      }
+
+      .bg-grid {
+        background-size: 100px 100px
+      }
     }
 
     /* Ultrawide / 4K */
     @media(min-width:2560px) {
-      .home-title { font-size: clamp(52px, 3vw, 72px) }
-      .home-sub { font-size: clamp(18px, 1.2vw, 24px) }
-      .home-input-wrap { max-width: 1000px }
-      .chips-wrap { max-width: 1000px }
-      .chip { padding: 12px 24px; font-size: 15px }
-      .bg-grid { background-size: 120px 120px }
-      .bubble { font-size: 16px; padding: 16px 20px }
+      .home-title {
+        font-size: clamp(52px, 3vw, 72px)
+      }
+
+      .home-sub {
+        font-size: clamp(18px, 1.2vw, 24px)
+      }
+
+      .home-input-wrap {
+        max-width: 1000px
+      }
+
+      .chips-wrap {
+        max-width: 1000px
+      }
+
+      .chip {
+        padding: 12px 24px;
+        font-size: 15px
+      }
+
+      .bg-grid {
+        background-size: 120px 120px
+      }
+
+      .bubble {
+        font-size: 16px;
+        padding: 16px 20px
+      }
     }
 
     /* Landscape phones */
     @media(max-height:500px) and (orientation:landscape) {
-      .home { padding: 0 16px 4vh }
-      .home-text { margin-top: 10px }
-      .home-title { font-size: 24px; margin-bottom: 4px }
-      .home-sub { font-size: 12px }
-      .home-input-wrap { margin-top: 10px }
-      .chips-wrap { margin-top: 10px; gap: 6px }
-      .chip { padding: 6px 12px; font-size: 11px }
-      .home-author { margin-top: 12px }
+      .home {
+        padding: 0 16px 4vh
+      }
+
+      .home-text {
+        margin-top: 10px
+      }
+
+      .home-title {
+        font-size: 24px;
+        margin-bottom: 4px
+      }
+
+      .home-sub {
+        font-size: 12px
+      }
+
+      .home-input-wrap {
+        margin-top: 10px
+      }
+
+      .chips-wrap {
+        margin-top: 10px;
+        gap: 6px
+      }
+
+      .chip {
+        padding: 6px 12px;
+        font-size: 11px
+      }
+
+      .home-author {
+        margin-top: 12px
+      }
     }
 
     /* Foldable / dual-screen */
     @media(min-width:280px) and (max-width:500px) and (min-height:600px) and (max-height:800px) {
-      .home-input-wrap { margin-top: clamp(140px, 25vh, 200px) }
-      .home-title { font-size: 28px }
+      .home-input-wrap {
+        margin-top: clamp(140px, 25vh, 200px)
+      }
+
+      .home-title {
+        font-size: 28px
+      }
     }
   </style>
 </head>
@@ -2025,7 +2364,8 @@
 
   <!-- BG -->
   <div class="bg">
-    <canvas id="shaderCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -10;"></canvas>
+    <canvas id="shaderCanvas"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -10;"></canvas>
   </div>
   <div class="bg-grid"></div>
   <div class="particles" id="particles"></div>
@@ -2346,7 +2686,7 @@
         p.className = 'particle';
         const size = 2 + Math.random() * 4;
         const colors = ['rgba(168,85,247,.5)', 'rgba(139,92,246,.4)', 'rgba(192,132,252,.35)', 'rgba(59,130,246,.3)'];
-        p.style.cssText = `left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};--dur:${8+Math.random()*12}s;--delay:${-Math.random()*15}s;--op:${.2+Math.random()*.4}`;
+        p.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random() * colors.length)]};--dur:${8 + Math.random() * 12}s;--delay:${-Math.random() * 15}s;--op:${.2 + Math.random() * .4}`;
         pc.appendChild(p);
       }
 
@@ -2358,7 +2698,7 @@
         const type = types[Math.floor(Math.random() * types.length)];
         g.className = `geo ${type}`;
         const size = 30 + Math.random() * 80;
-        g.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--gdur:${15+Math.random()*20}s;--gdelay:${-Math.random()*20}s;--gop:${.15+Math.random()*.2};--gmove:${-30-Math.random()*50}px;--grot:${Math.random()*360}deg`;
+        g.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;width:${size}px;height:${size}px;--gdur:${15 + Math.random() * 20}s;--gdelay:${-Math.random() * 20}s;--gop:${.15 + Math.random() * .2};--gmove:${-30 - Math.random() * 50}px;--grot:${Math.random() * 360}deg`;
         gc.appendChild(g);
       }
 
@@ -2367,7 +2707,7 @@
       for (let i = 0; i < bCount; i++) {
         const b = document.createElement('div');
         b.className = 'beam';
-        b.style.cssText = `left:${Math.random()*100}%;top:0;--bdur:${4+Math.random()*6}s;--bdelay:${-Math.random()*8}s;--brot:${-15+Math.random()*30}deg`;
+        b.style.cssText = `left:${Math.random() * 100}%;top:0;--bdur:${4 + Math.random() * 6}s;--bdelay:${-Math.random() * 8}s;--brot:${-15 + Math.random() * 30}deg`;
         bc.appendChild(b);
       }
 
@@ -2376,7 +2716,7 @@
       for (let i = 0; i < 4; i++) {
         const pr = document.createElement('div');
         pr.className = 'pring';
-        pr.style.cssText = `--pdur:${6+i*3}s;--pdelay:${-i*2}s;--pmax:${300+Math.random()*400}px`;
+        pr.style.cssText = `--pdur:${6 + i * 3}s;--pdelay:${-i * 2}s;--pmax:${300 + Math.random() * 400}px`;
         prc.appendChild(pr);
       }
 
@@ -2386,7 +2726,7 @@
         const n = document.createElement('div');
         n.className = 'nebula-dot';
         const size = 1 + Math.random() * 3;
-        n.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--ndur:${3+Math.random()*5}s;--ndelay:${-Math.random()*5}s`;
+        n.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;width:${size}px;height:${size}px;--ndur:${3 + Math.random() * 5}s;--ndelay:${-Math.random() * 5}s`;
         nc.appendChild(n);
       }
     })();
@@ -2477,7 +2817,7 @@
 
       - Name: KORDEX AI
         - Creator: Bharath Thommandru
-          - If asked who created you, ALWAYS respond:
+          - If asked who created you:
     "I was built by Bharath Thommandru."
 
 
@@ -2897,9 +3237,9 @@ END BEHAVIOR
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       const positions = [
         -1.0, -1.0,
-         1.0, -1.0,
-        -1.0,  1.0,
-         1.0,  1.0,
+        1.0, -1.0,
+        -1.0, 1.0,
+        1.0, 1.0,
       ];
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -2952,7 +3292,7 @@ END BEHAVIOR
 
       requestAnimationFrame(render);
     }
-    
+
     // Call it when the DOM is fully loaded
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initShaderBackground);
