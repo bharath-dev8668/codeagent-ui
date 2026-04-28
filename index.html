@@ -147,12 +147,11 @@
               </button>
               <div class="input-agent-pill model-active" id="homePill1" onclick="selectModel('llama-3.3-70b-versatile')"
                 style="pointer-events:auto;cursor:pointer">
-                ⚡ llama-3.3-70b
+                ⚡ Llama 3.3 (Code & Chat)
               </div>
-              <div class="input-agent-pill" id="homePill2"
-                onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
+              <div class="input-agent-pill" id="homePill2" onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
                 style="pointer-events:auto;cursor:pointer">
-                👁 llama-4-scout
+                👁 Llama Scout (Vision & PDF)
               </div>
               <input type="file" id="fileInput" multiple
                 accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg"
@@ -253,10 +252,9 @@
           <div class="ctop-name">KORDEX AI</div>
           <div class="ctop-row">
             <span class="mpill model-active" id="chatPill1" onclick="selectModel('llama-3.3-70b-versatile')"
-              style="cursor:pointer">⚡
-              llama-3.3-70b</span>
+              style="cursor:pointer">⚡ Llama 3.3 (Code & Chat)</span>
             <span class="mpill" id="chatPill2" onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
-              style="cursor:pointer">👁 llama-4-scout</span>
+              style="cursor:pointer">👁 Llama Scout (Vision & PDF)</span>
             <span class="spill sp-ready" id="spill"><span class="sdot"></span><span id="slabel">Ready</span></span>
           </div>
         </div>
@@ -308,6 +306,7 @@
 
   <script>
     // 👇 PASTE YOUR GROQ KEY HERE
+    const GROQ_KEY = ''; // Key is loaded server-side via .env.local (not committed to git)
     let MODEL = 'llama-3.3-70b-versatile';
     let busy = false, hist = [], sbOpen = false;
     let homeFiles = [], chatFiles = [];
@@ -720,9 +719,16 @@ END BEHAVIOR
       const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
 
       addMsg('user', displayMsg || '📎 Files attached', [], fileNames);
-      // Use content array if there are images, string otherwise (PDFs are extracted to text)
-      const hasImages = fileResults.some(fr => fr.type === 'image');
-      const userContent = hasImages ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
+      const hasImagesOrPDF = fileResults.some(fr => fr.type === 'image' || fr.type === 'pdf');
+
+      // Auto-switch models based on attachments
+      if (hasImagesOrPDF) {
+        selectModel('meta-llama/llama-4-scout-17b-16e-instruct');
+      } else {
+        selectModel('llama-3.3-70b-versatile');
+      }
+
+      const userContent = hasImagesOrPDF ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
       hist.push({ role: 'user', content: userContent });
       showThink();
 

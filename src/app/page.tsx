@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import KordexBackground from '@/components/KordexBackground';
-import { SYS, GROQ_KEY, fmt, readFileText, extractPDFText, THINK_CYCLE } from '@/src/lib/kordex-config';
+import { SYS, fmt, readFileText, extractPDFText, THINK_CYCLE } from '@/src/lib/kordex-config';
 
 interface Msg { role: 'user' | 'agent'; html: string; tools?: string[]; attachments?: string[] }
 
@@ -103,18 +103,27 @@ export default function Page() {
     const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
     setMsgs(m => [...m, { role: 'user', html: fmt(displayMsg || '📎 Files attached'), attachments: fileNames }]);
 
-    const hasImages = fileResults.some((fr: any) => fr.type === 'image');
-    const userContent = hasImages ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
+    const hasImagesOrPDF = fileResults.some((fr: any) => fr.type === 'image' || fr.type === 'pdf');
+
+    // Auto-switch models based on attachments
+    // Use local var because setModel is async and won't update `model` in time for fetch
+    let activeModel = model;
+    if (hasImagesOrPDF) {
+      activeModel = 'meta-llama/llama-4-scout-17b-16e-instruct';
+      setModel(activeModel);
+    }
+
+    const userContent = hasImagesOrPDF ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
     histRef.current.push({ role: 'user', content: userContent });
 
     setThinking(true);
     setThinkIdx(0);
 
     try {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
-        body: JSON.stringify({ model, max_tokens: 4096, temperature: 0.3, messages: [{ role: 'system', content: SYS }, ...histRef.current] })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: activeModel, max_tokens: 4096, temperature: 0.3, messages: [{ role: 'system', content: SYS }, ...histRef.current] })
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error.message);
@@ -245,8 +254,8 @@ export default function Page() {
                     <button className="icon-btn" onClick={() => homeFileRef.current?.click()} title="Attach file">
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
                     </button>
-                    <div className={`input-agent-pill ${isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ llama-3.3-70b</div>
-                    <div className={`input-agent-pill ${!isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 llama-4-scout</div>
+                    <div className={`input-agent-pill ${isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ Llama 3.3 (Code & Chat)</div>
+                    <div className={`input-agent-pill ${!isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 Llama Scout (Vision & PDF)</div>
                     <input ref={homeFileRef} type="file" id="fileInput" multiple accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg" onChange={e => handleHomeFiles(e.currentTarget)} style={{ display: 'none' }} />
                   </div>
                   <button className="send-btn" onClick={homeSubmit}>
@@ -284,8 +293,8 @@ export default function Page() {
               <div className="ctop-info">
                 <div className="ctop-name">KORDEX AI</div>
                 <div className="ctop-row">
-                  <span className={`mpill ${isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ llama-3.3-70b</span>
-                  <span className={`mpill ${!isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 llama-4-scout</span>
+                  <span className={`mpill ${isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ Llama 3.3 (Code & Chat)</span>
+                  <span className={`mpill ${!isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 Llama Scout (Vision & PDF)</span>
                   <span className={`spill ${status.cls}`}><span className="sdot" /><span>{status.label}</span></span>
                 </div>
               </div>

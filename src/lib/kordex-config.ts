@@ -1,4 +1,3 @@
-export const GROQ_KEY = process.env.NEXT_PUBLIC_AI_API_KEY || '';
 
 export const SYS = `You are KORDEX AI — a world-class autonomous coding and reasoning agent built by Bharath Thommandru.
 
