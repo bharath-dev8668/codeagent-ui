@@ -100,7 +100,32 @@ export function readFileText(file: File): Promise<FileResult> {
   return new Promise((res) => {
     if (file.type.startsWith('image/')) {
       const r = new FileReader();
-      r.onload = (e) => res({ type: 'image', data: e.target?.result, name: file.name, mime: file.type });
+      r.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const max_dim = 1200; // Resize to max 1200px to avoid Vercel 4.5MB payload limit
+          if (width > max_dim || height > max_dim) {
+            if (width > height) {
+              height = Math.round((height * max_dim) / width);
+              width = max_dim;
+            } else {
+              width = Math.round((width * max_dim) / height);
+              height = max_dim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85); // Use JPEG compression to reduce size
+          res({ type: 'image', data: dataUrl, name: file.name, mime: 'image/jpeg' });
+        };
+        img.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
+        img.src = e.target?.result as string;
+      };
       r.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
       r.readAsDataURL(file);
     } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {

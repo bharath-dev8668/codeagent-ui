@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 60; // Max allowed for Vercel free tier
+
 const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.NEXT_PUBLIC_AI_API_KEY || '';
 
 export async function POST(req: NextRequest) {
