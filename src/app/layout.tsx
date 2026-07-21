@@ -3,6 +3,9 @@ import "./globals.css"
 export const metadata = {
   title: 'KORDEX AI',
   description: 'Software engineering assistant — write, debug, and refactor code.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
