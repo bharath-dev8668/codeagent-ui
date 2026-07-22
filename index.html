@@ -10,6 +10,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
+  <style>
+    .drop-zone { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(10,5,30,.85); backdrop-filter: blur(8px); border: 2px dashed rgba(168,85,247,.4); border-radius: 12px; pointer-events: none; }
+    .home.drag-over, .chat-msgs.drag-over { position: relative; }
+    .drop-zone-inner { font-size: 16px; font-weight: 500; color: rgba(192,132,252,.7); padding: 20px; border: 1px dashed rgba(168,85,247,.25); border-radius: 12px; background: rgba(168,85,247,.05); }
+    .preview-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .preview-img { width: auto; height: 80px; max-width: 140px; border-radius: 8px; border: 1px solid rgba(124,58,237,.15); object-fit: cover; background: rgba(0,0,0,.3); }
+  </style>
 
 </head>
 
@@ -59,7 +66,7 @@
       </div>
       <div class="agent-pills">
         <span class="apill apill-g">Online</span>
-        <span class="apill apill-p">Groq · Dual Model</span>
+        <span class="apill apill-p">Groq</span>
       </div>
     </div>
 
@@ -124,34 +131,15 @@
       </div>
 
       <div class="home-input-wrap">
-        <!-- File preview strip -->
-        <div class="file-strip" id="homeFileStrip"></div>
 
         <div class="glass-input">
           <textarea id="homeInp" placeholder="What are you working on?" rows="1" onkeydown="homeKey(event)"
             oninput="homeResize(this)"></textarea>
           <div class="glass-footer">
             <div class="gf-left">
-              <button class="icon-btn" onclick="document.getElementById('fileInput').click()" title="Attach file">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-paperclip">
-                  <path
-                    d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                </svg>
-              </button>
-              <div class="input-agent-pill model-active" id="homePill1" onclick="selectModel('llama-3.3-70b-versatile')"
-                style="pointer-events:auto;cursor:pointer">
+              <div class="input-agent-pill model-active" style="pointer-events:auto;cursor:default">
                 ⚡ Llama 3.3 (Code & Chat)
               </div>
-              <div class="input-agent-pill" id="homePill2"
-                onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
-                style="pointer-events:auto;cursor:pointer">
-                👁 Llama Scout (Vision & PDF)
-              </div>
-              <input type="file" id="fileInput" multiple
-                accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg"
-                onchange="handleHomeFiles(this)">
             </div>
             <button class="send-btn" onclick="homeSubmit()">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -247,10 +235,7 @@
         <div class="ctop-info">
           <div class="ctop-name">KORDEX AI</div>
           <div class="ctop-row">
-            <span class="mpill model-active" id="chatPill1" onclick="selectModel('llama-3.3-70b-versatile')"
-              style="cursor:pointer">⚡ Llama 3.3 (Code & Chat)</span>
-            <span class="mpill" id="chatPill2" onclick="selectModel('meta-llama/llama-4-scout-17b-16e-instruct')"
-              style="cursor:pointer">👁 Llama Scout (Vision & PDF)</span>
+            <span class="mpill model-active" style="cursor:default">⚡ Llama 3.3 (Code & Chat)</span>
             <span class="spill sp-ready" id="spill"><span class="sdot"></span><span id="slabel">Ready</span></span>
           </div>
         </div>
@@ -262,23 +247,11 @@
       <div class="scrbtn" id="scrbtn" onclick="scrollBottom()">↓</div>
 
       <div class="ciarea">
-        <!-- Chat file strip -->
-        <div class="chat-file-strip" id="chatFileStrip"></div>
-
         <div class="cglass">
           <div class="cglass-top">
             <textarea id="chatInp" placeholder="Ask anything about code…" rows="1"
               onkeydown="chatKey(event)" oninput="chatResize(this)"></textarea>
             <button class="csend" id="csend" onclick="sendMsg()">↑</button>
-          </div>
-          <div class="cglass-footer">
-            <div class="cglass-footer-l">
-              <button class="icon-btn" onclick="document.getElementById('chatFileInput').click()"
-                title="Attach file">📎</button>
-              <input type="file" id="chatFileInput" multiple
-                accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg"
-                onchange="handleChatFiles(this)">
-            </div>
           </div>
           <div class="chat-chips">
             <div class="cchip" onclick="sp('Write a Python scraper')">🐍 Python</div>
@@ -302,20 +275,10 @@
   <script>
     // 👇 PASTE YOUR GROQ KEY HERE
     const GROQ_KEY = ''; // Key is loaded server-side via .env.local (not committed to git)
-    let MODEL = 'llama-3.3-70b-versatile';
+    const MODEL = 'llama-3.3-70b-versatile';
     let busy = false, hist = [], sbOpen = false;
-    let homeFiles = [], chatFiles = [];
 
-    // ── MODEL SWITCHER ──
-    function selectModel(m) {
-      MODEL = m;
-      const isLlama = m === 'llama-3.3-70b-versatile';
-      // Toggle active class
-      document.getElementById('homePill1').classList.toggle('model-active', isLlama);
-      document.getElementById('homePill2').classList.toggle('model-active', !isLlama);
-      document.getElementById('chatPill1').classList.toggle('model-active', isLlama);
-      document.getElementById('chatPill2').classList.toggle('model-active', !isLlama);
-    }
+
 
     // ── BACKGROUND ANIMATIONS ──
     (function () {
@@ -389,141 +352,58 @@
     sidebar.addEventListener('mouseleave', closeSidebar);
 
     // ── FILE HANDLING ──
-    function handleHomeFiles(input) {
-      homeFiles = [...homeFiles, ...Array.from(input.files)];
-      renderHomeFiles(); input.value = '';
-    }
-    function renderHomeFiles() {
-      const strip = document.getElementById('homeFileStrip');
-      strip.innerHTML = '';
-      homeFiles.forEach((f, i) => {
-        const el = document.createElement('div'); el.className = 'file-chip';
-        el.innerHTML = `📄 ${f.name} <span class="fc-remove" onclick="removeHomeFile(${i})">✕</span>`;
-        strip.appendChild(el);
-      });
-      strip.classList.toggle('show', homeFiles.length > 0);
-    }
-    function removeHomeFile(i) { homeFiles.splice(i, 1); renderHomeFiles() }
-
-    function handleChatFiles(input) {
-      chatFiles = [...chatFiles, ...Array.from(input.files)];
-      renderChatFiles(); input.value = '';
-    }
-    function renderChatFiles() {
-      const strip = document.getElementById('chatFileStrip');
-      strip.innerHTML = '';
-      chatFiles.forEach((f, i) => {
-        const el = document.createElement('div'); el.className = 'file-chip';
-        el.innerHTML = `📄 ${f.name} <span class="fc-remove" onclick="removeChatFile(${i})">✕</span>`;
-        strip.appendChild(el);
-      });
-      strip.classList.toggle('show', chatFiles.length > 0);
-    }
-    function removeChatFile(i) { chatFiles.splice(i, 1); renderChatFiles() }
-
-    async function readFileText(file) {
-      return new Promise(res => {
-        if (file.type.startsWith('image/')) {
-          const r = new FileReader();
-          r.onload = e => res({ type: 'image', data: e.target.result, name: file.name, mime: file.type });
-          r.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
-          r.readAsDataURL(file);
-        } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-          const r = new FileReader();
-          r.onload = e => res({ type: 'pdf', data: e.target.result, name: file.name, mime: 'application/pdf' });
-          r.onerror = () => res({ type: 'text', data: '[Could not read PDF: ' + file.name + ']', name: file.name });
-          r.readAsArrayBuffer(file);
-        } else {
-          const r = new FileReader();
-          r.onload = e => res({ type: 'text', data: e.target.result, name: file.name });
-          r.onerror = () => res({ type: 'text', data: '[Could not read: ' + file.name + ']', name: file.name });
-          r.readAsText(file);
-        }
-      });
-    }
-
-    async function extractPDFText(arrayBuffer) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let text = '';
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const pageText = content.items.map(item => item.str).join(' ');
-        text += `\n\n--- Page ${i} ---\n${pageText}`;
-      }
-      return text.trim();
-    }
-
     // ── SYSTEM ──
-    const SYS = `You are KORDEX, a senior software engineering assistant.
+    const SYS = `You are KORDEX — a senior software engineer and programming assistant.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     SCOPE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You specialize in: Programming, Debugging, System Design, Architecture, DevOps, AI/ML, Databases, Security, Cloud, Algorithms, Web Development, Mobile Development, Code Reviews, Performance Optimization, and Technical Documentation.
+You specialize in programming, debugging, system design, architecture, DevOps, AI/ML, databases, security, cloud, algorithms, web and mobile development, code reviews, performance optimization, and technical documentation.
 
-If a request falls outside software engineering, respond warmly but briefly:
-"That's outside my area of focus — I specialize in software engineering, programming, and technical problem-solving. If you've got a coding challenge or architecture question, I'm happy to help."
-
-Do not sound cold, robotic, or dismissive. Be respectful and redirect naturally.
+If a request falls outside software engineering, respond warmly but briefly: "That's outside my area of focus — I specialize in software engineering, programming, and technical problem-solving. If you've got a coding challenge or architecture question, I'm happy to help."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    GREETINGS & IDENTITY
+    GREETINGS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-When greeted, respond naturally and briefly:
 - "Hey! What are we building today?"
-- "Hello! Need help with something?"
-- "Hey — what can I help you with?"
+- "Hello! What are we working on?"
+- "Hi! How can I help?"
 
-Keep it one line. Do not advertise capabilities. Do not over-explain what you do.
-
-If asked who built you, reply: "I'm KORDEX, built by Bharath Thommandru."
+Keep it one line, warm, and natural. Do not list capabilities. If asked who built you: "I'm KORDEX, built by Bharath Thommandru."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    CODING STANDARDS
+    CODING & DEBUGGING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Write clean, production-ready code.
-- Follow best practices and scalable architecture.
-- Support all major languages and frameworks.
-- Debug with root cause analysis, not surface-level fixes.
+- Write clean, production-ready code following best practices for the language and framework in use.
+- Debug thoroughly — find the root cause and show how to fix it.
 - Never fabricate APIs, libraries, or commands.
-- Mention relevant dependencies and setup when useful.
+- Consider scalability, maintainability, security, error handling, and deployment.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ARCHITECTURE & DEBUGGING
+    RESPONSE RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Think in systems, not snippets. Consider: scalability, maintainability, security, error handling, and deployment.
+Speak naturally, like a human expert — not like an AI or a document.
 
-When debugging: identify root cause, explain why it happened, show how to fix it, and note how to prevent it.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    RESPONSE STYLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Communicate like a senior developer talking to another engineer.
-
-- Keep responses proportional: short answers for simple questions, detailed explanations for complex problems.
-- Use headings, code blocks, and bullet points only when they improve clarity.
-- No mandatory section structure. Adapt format to the question.
+- Never start with "The user has provided", "I can see", "Based on the", "Analyzing the", or any similar framing.
+- Never output "Thinking process", "Plan", "Draft", "Reasoning", "Self-correction", or any step-by-step narration.
+- Never explain what you are about to do. Just do it.
+- Output only the final answer. Think internally.
+- Be concise by default. Give the answer directly. Expand only when asked for more detail.
+- Use markdown (bold, lists, code blocks) when it improves readability, but don't over-format.
 - Avoid: "Does this make sense?", "Let me know if you need more", "I hope this helps", "Want me to explain further?"
-- Never use ALL CAPS for emphasis.
-- Never use excessive emojis or decorative formatting.
-- End responses naturally. Do not add filler closings.
+- End naturally. No filler.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    PERSONALITY
+    TONE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tone: Professional, confident, friendly, and direct.
-Think like a senior engineer mentoring another developer.
-Be honest. If uncertain, say so clearly rather than guessing.
-Prioritize correctness over speed.
-Never be arrogant, rude, or overly casual.`;
+Professional, warm, and direct — like a senior engineer chatting with a teammate.
+Be honest. If you don't know something, say so clearly.
+Prioritize correctness over speed. Never be arrogant, rude, or overly casual.`;
 
       // ── HELPERS ──
       function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
@@ -538,7 +418,7 @@ Never be arrogant, rude, or overly casual.`;
     function sp(t) { const e = document.getElementById('chatInp'); e.value = t; e.focus(); chatResize(e) }
     function scrollBottom() { document.getElementById('chatMsgs').scrollTop = 9999 }
     function checkScroll() { const c = document.getElementById('chatMsgs'), b = document.getElementById('scrbtn'); b.classList.toggle('show', c.scrollHeight - c.scrollTop - c.clientHeight > 100) }
-    function clearChat() { if (!confirm('Clear conversation?')) return; hist = []; document.getElementById('chatMsgs').innerHTML = ''; chatFiles = []; renderChatFiles() }
+    function clearChat() { if (!confirm('Clear conversation?')) return; hist = []; document.getElementById('chatMsgs').innerHTML = '' }
 
     function homeResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 150) + 'px' }
     function chatResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 130) + 'px' }
@@ -546,33 +426,31 @@ Never be arrogant, rude, or overly casual.`;
     function homeKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); homeSubmit() } }
     async function homeSubmit() {
       const t = document.getElementById('homeInp').value.trim();
-      const files = [...homeFiles];
-      homeFiles = []; renderHomeFiles();
       document.getElementById('homeInp').value = '';
-      if (!t && !files.length) return;
-      await startChat(t, files);
+      if (!t) return;
+      await startChat(t);
     }
 
-    async function startChat(txt, files = []) {
+    async function startChat(txt) {
       document.getElementById('homeScreen').style.display = 'none';
       document.getElementById('chatScreen').classList.add('active');
-      if (txt || files.length) await sendWithContent(txt, files);
+      if (txt) await sendWithContent(txt);
     }
 
     function goHome() {
       document.getElementById('chatScreen').classList.remove('active');
       document.getElementById('homeScreen').style.display = '';
       hist = []; document.getElementById('chatMsgs').innerHTML = '';
-      chatFiles = []; renderChatFiles();
     }
 
-    function addMsg(role, text, tools = [], attachments = []) {
+    function addMsg(role, text, tools = [], attachments = [], previews = []) {
       const c = document.getElementById('chatMsgs'), w = document.createElement('div');
       w.className = `msg ${role}`;
       const isA = role === 'agent';
       const th = tools.length ? `<div class="trow">${tools.map(t => `<span class="tpill">${t}</span>`).join('')}</div>` : '';
       const fa = attachments.length ? attachments.map(a => `<div class="file-attach">📄 ${a}</div>`).join('') : '';
-      w.innerHTML = `<div class="mav ${role}">${isA ? '<svg viewBox="0 0 18 18" fill="none" style="width:16px;height:16px"><path d="M10.5 1L4 10h5L7 17L14 8H9L10.5 1Z" fill="#F97316" stroke="#F97316" stroke-width=".5" stroke-linejoin="round"/></svg>' : '👤'}</div><div class="mbody"><div class="mwho">${isA ? 'KORDEX AI' : 'You'}</div>${th}${fa}<div class="bubble">${fmt(text)}</div></div>`;
+      const pv = previews.length ? `<div class="preview-row">${previews.map(p => `<img class="preview-img" src="${p}" alt="Upload">`).join('')}</div>` : '';
+      w.innerHTML = `<div class="mav ${role}">${isA ? '<svg viewBox="0 0 18 18" fill="none" style="width:16px;height:16px"><path d="M10.5 1L4 10h5L7 17L14 8H9L10.5 1Z" fill="#F97316" stroke="#F97316" stroke-width=".5" stroke-linejoin="round"/></svg>' : '👤'}</div><div class="mbody"><div class="mwho">${isA ? 'KORDEX AI' : 'You'}</div>${th}${fa}${pv}<div class="bubble">${fmt(text)}</div></div>`;
       c.appendChild(w); c.scrollTop = 9999;
     }
 
@@ -589,62 +467,18 @@ Never be arrogant, rude, or overly casual.`;
     function chatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg() } }
     async function sendMsg() {
       const inp = document.getElementById('chatInp'), txt = inp.value.trim();
-      const files = [...chatFiles];
-      if (!txt && !files.length || busy) return;
+      if (!txt || busy) return;
       inp.value = ''; inp.style.height = 'auto';
-      chatFiles = []; renderChatFiles();
-      await sendWithContent(txt, files);
+      await sendWithContent(txt);
     }
 
-    async function sendWithContent(txt, files = []) {
+    async function sendWithContent(txt) {
       busy = true;
       document.getElementById('csend').disabled = true;
       setSt('Working…', 'sp-busy');
 
-      // Read file contents
-      const fileNames = [];
-      const fileResults = [];
-      for (const f of files) {
-        const content = await readFileText(f);
-        fileNames.push(f.name);
-        fileResults.push(content);
-      }
-
-      // Build content array for vision model
-      const contentParts = [];
-      let textPart = txt || '';
-      for (const fr of fileResults) {
-        if (fr.type === 'image') {
-          contentParts.push({ type: 'image_url', image_url: { url: fr.data } });
-          textPart += (textPart ? '\n' : '') + `[Attached image: ${fr.name}]`;
-        } else if (fr.type === 'pdf') {
-          try {
-            const pdfText = await extractPDFText(fr.data);
-            textPart += `\n\n--- PDF: ${fr.name} ---\n${pdfText}`;
-          } catch (e) {
-            textPart += `\n\n--- PDF: ${fr.name} ---\n[Could not extract text from PDF]`;
-          }
-        } else {
-          textPart += `\n\n--- File: ${fr.name} ---\n${fr.data}`;
-        }
-      }
-      if (!textPart && fileNames.length) textPart = `Analyze these files: ${fileNames.join(', ')}`;
-      if (textPart) contentParts.unshift({ type: 'text', text: textPart });
-
-      const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
-
-      addMsg('user', displayMsg || '📎 Files attached', [], fileNames);
-      const hasImagesOrPDF = fileResults.some(fr => fr.type === 'image' || fr.type === 'pdf');
-
-      // Auto-switch models based on attachments
-      if (hasImagesOrPDF) {
-        selectModel('meta-llama/llama-4-scout-17b-16e-instruct');
-      } else {
-        selectModel('llama-3.3-70b-versatile');
-      }
-
-      const userContent = hasImagesOrPDF ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
-      hist.push({ role: 'user', content: userContent });
+      addMsg('user', txt || '');
+      hist.push({ role: 'user', content: txt });
       showThink();
 
       try {
@@ -665,7 +499,7 @@ Never be arrogant, rude, or overly casual.`;
         addMsg('agent', reply, tools); setSt('Ready', 'sp-ready');
       } catch (err) {
         clearInterval(window._tt); document.getElementById('tm')?.remove();
-        addMsg('agent', `Something went wrong: ${err.message}\n\nIf you're using vision features, try switching to Llama Scout for image support.`); setSt('Error', 'sp-err');
+        addMsg('agent', `Something went wrong: ${err.message}`); setSt('Error', 'sp-err');
       }
       busy = false; document.getElementById('csend').disabled = false;
     }

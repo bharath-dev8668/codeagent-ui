@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import KordexBackground from '@/components/KordexBackground';
-import { SYS, fmt, readFileText, extractPDFText, THINK_CYCLE } from '@/src/lib/kordex-config';
+import { SYS, fmt, THINK_CYCLE } from '@/src/lib/kordex-config';
 
-interface Msg { role: 'user' | 'agent'; html: string; tools?: string[]; attachments?: string[] }
+interface Msg { role: 'user' | 'agent'; html: string; tools?: string[]; attachments?: string[]; previews?: string[] }
 
 const BoltSvg = ({ size = 16 }: { size?: number }) => (
   <svg viewBox="0 0 18 18" fill="none" style={{ width: size, height: size }}>
@@ -14,13 +14,11 @@ const BoltSvg = ({ size = 16 }: { size?: number }) => (
 
 export default function Page() {
   const [screen, setScreen] = useState<'home' | 'chat'>('home');
-  const [model, setModel] = useState('llama-3.3-70b-versatile');
+  const MODEL = 'llama-3.3-70b-versatile';
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
   const [sbOpen, setSbOpen] = useState(false);
   const [status, setStatus] = useState<{ label: string; cls: string }>({ label: 'Ready', cls: 'sp-ready' });
-  const [homeFiles, setHomeFiles] = useState<File[]>([]);
-  const [chatFiles, setChatFiles] = useState<File[]>([]);
   const [thinking, setThinking] = useState(false);
   const [thinkIdx, setThinkIdx] = useState(0);
   const [showScroll, setShowScroll] = useState(false);
@@ -29,8 +27,6 @@ export default function Page() {
   const chatMsgsRef = useRef<HTMLDivElement>(null);
   const homeInpRef = useRef<HTMLTextAreaElement>(null);
   const chatInpRef = useRef<HTMLTextAreaElement>(null);
-  const homeFileRef = useRef<HTMLInputElement>(null);
-  const chatFileRef = useRef<HTMLInputElement>(null);
   const thinkTimer = useRef<any>(null);
   const sbCloseTimer = useRef<any>(null);
 
@@ -61,60 +57,14 @@ export default function Page() {
   // Textarea auto-resize
   const autoResize = (el: HTMLTextAreaElement, max: number) => { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, max) + 'px'; };
 
-  // File handlers
-  const handleHomeFiles = (input: HTMLInputElement) => {
-    if (input.files) { setHomeFiles(f => [...f, ...Array.from(input.files!)]); input.value = ''; }
-  };
-  const handleChatFiles = (input: HTMLInputElement) => {
-    if (input.files) { setChatFiles(f => [...f, ...Array.from(input.files!)]); input.value = ''; }
-  };
-
   // Core send logic
-  const sendWithContent = async (txt: string, files: File[]) => {
+  const sendWithContent = async (txt: string) => {
     setBusy(true);
     setStatus({ label: 'Working…', cls: 'sp-busy' });
 
-    const fileNames: string[] = [];
-    const fileResults: any[] = [];
-    for (const f of files) {
-      const content = await readFileText(f);
-      fileNames.push(f.name);
-      fileResults.push(content);
-    }
+    setMsgs(m => [...m, { role: 'user', html: fmt(txt || '') }]);
 
-    const contentParts: any[] = [];
-    let textPart = txt || '';
-    for (const fr of fileResults) {
-      if (fr.type === 'image') {
-        contentParts.push({ type: 'image_url', image_url: { url: fr.data } });
-        textPart += (textPart ? '\n' : '') + `[Attached image: ${fr.name}]`;
-      } else if (fr.type === 'pdf') {
-        try {
-          const pdfText = await extractPDFText(fr.data);
-          textPart += `\n\n--- PDF: ${fr.name} ---\n${pdfText}`;
-        } catch { textPart += `\n\n--- PDF: ${fr.name} ---\n[Could not extract text]`; }
-      } else {
-        textPart += `\n\n--- File: ${fr.name} ---\n${fr.data}`;
-      }
-    }
-    if (!textPart && fileNames.length) textPart = `Analyze these files: ${fileNames.join(', ')}`;
-    if (textPart) contentParts.unshift({ type: 'text', text: textPart });
-
-    const displayMsg = txt || (files.length ? `Attached ${files.length} file(s)` : '');
-    setMsgs(m => [...m, { role: 'user', html: fmt(displayMsg || '📎 Files attached'), attachments: fileNames }]);
-
-    const hasImagesOrPDF = fileResults.some((fr: any) => fr.type === 'image' || fr.type === 'pdf');
-
-    // Auto-switch models based on attachments
-    // Use local var because setModel is async and won't update `model` in time for fetch
-    let activeModel = model;
-    if (hasImagesOrPDF) {
-      activeModel = 'meta-llama/llama-4-scout-17b-16e-instruct';
-      setModel(activeModel);
-    }
-
-    const userContent = hasImagesOrPDF ? contentParts : (textPart || `Analyze these files: ${fileNames.join(', ')}`);
-    histRef.current.push({ role: 'user', content: userContent });
+    histRef.current.push({ role: 'user', content: txt });
 
     setThinking(true);
     setThinkIdx(0);
@@ -123,7 +73,7 @@ export default function Page() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: activeModel, max_tokens: 4096, temperature: 0.3, messages: [{ role: 'system', content: SYS }, ...histRef.current] })
+        body: JSON.stringify({ model: MODEL, max_tokens: 4096, temperature: 0.3, messages: [{ role: 'system', content: SYS }, ...histRef.current] })
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error.message);
@@ -138,7 +88,7 @@ export default function Page() {
       setStatus({ label: 'Ready', cls: 'sp-ready' });
     } catch (err: any) {
       setThinking(false);
-      setMsgs(m => [...m, { role: 'agent', html: fmt(`Something went wrong: ${err.message}\n\nIf you're using vision features, try switching to Llama Scout for image support.`) }]);
+      setMsgs(m => [...m, { role: 'agent', html: fmt(`Something went wrong: ${err.message}`) }]);
       setStatus({ label: 'Error', cls: 'sp-err' });
     }
     setBusy(false);
@@ -146,31 +96,27 @@ export default function Page() {
 
   const homeSubmit = async () => {
     const t = homeInpRef.current?.value.trim() || '';
-    const files = [...homeFiles];
-    setHomeFiles([]);
     if (homeInpRef.current) homeInpRef.current.value = '';
-    if (!t && !files.length) return;
+    if (!t) return;
     setScreen('chat');
-    await sendWithContent(t, files);
+    await sendWithContent(t);
   };
 
-  const startChat = (txt: string) => { setScreen('chat'); sendWithContent(txt, []); };
+  const startChat = (txt: string) => { setScreen('chat'); sendWithContent(txt); };
 
   const sendMsg = async () => {
     const inp = chatInpRef.current;
     const txt = inp?.value.trim() || '';
-    const files = [...chatFiles];
-    if ((!txt && !files.length) || busy) return;
+    if (!txt || busy) return;
     if (inp) { inp.value = ''; inp.style.height = 'auto'; }
-    setChatFiles([]);
-    await sendWithContent(txt, files);
+    await sendWithContent(txt);
   };
 
-  const goHome = () => { setScreen('home'); setMsgs([]); histRef.current = []; setChatFiles([]); };
-  const clearChat = () => { if (!confirm('Clear conversation?')) return; setMsgs([]); histRef.current = []; setChatFiles([]); };
+  const goHome = () => { setScreen('home'); setMsgs([]); histRef.current = []; };
+  const clearChat = () => { if (!confirm('Clear conversation?')) return; setMsgs([]); histRef.current = []; };
   const sp = (t: string) => { if (chatInpRef.current) { chatInpRef.current.value = t; chatInpRef.current.focus(); autoResize(chatInpRef.current, 130); } };
 
-  const isLlama = model === 'llama-3.3-70b-versatile';
+
 
   return (
     <>
@@ -196,7 +142,7 @@ export default function Page() {
           </div>
           <div className="agent-pills">
             <span className="apill apill-g">Online</span>
-            <span className="apill apill-p">Groq · Dual Model</span>
+            <span className="apill apill-p">Groq</span>
           </div>
         </div>
         <div className="cr-section">
@@ -231,7 +177,7 @@ export default function Page() {
       {/* APP */}
       <div className="app">
         {/* HOME SCREEN */}
-        {screen === 'home' && (
+          {screen === 'home' && (
           <div className="home" id="homeScreen">
             <div className="home-menu" onClick={toggleSidebar}>☰</div>
             <div className="home-text">
@@ -239,23 +185,13 @@ export default function Page() {
               <p className="home-sub">Write, debug, and refactor code with a senior engineer.</p>
             </div>
             <div className="home-input-wrap">
-              <div className={`file-strip ${homeFiles.length > 0 ? 'show' : ''}`}>
-                {homeFiles.map((f, i) => (
-                  <div key={i} className="file-chip">📄 {f.name} <span className="fc-remove" onClick={() => setHomeFiles(hf => hf.filter((_, j) => j !== i))}>✕</span></div>
-                ))}
-              </div>
               <div className="glass-input">
                 <textarea ref={homeInpRef} id="homeInp" placeholder="What are you working on?" rows={1}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); homeSubmit(); } }}
                   onInput={e => autoResize(e.currentTarget, 150)} />
                 <div className="glass-footer">
                   <div className="gf-left">
-                    <button className="icon-btn" onClick={() => homeFileRef.current?.click()} title="Attach file">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
-                    </button>
-                    <div className={`input-agent-pill ${isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ Llama 3.3 (Code & Chat)</div>
-                    <div className={`input-agent-pill ${!isLlama ? 'model-active' : ''}`} style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 Llama Scout (Vision & PDF)</div>
-                    <input ref={homeFileRef} type="file" id="fileInput" multiple accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg" onChange={e => handleHomeFiles(e.currentTarget)} style={{ display: 'none' }} />
+                    <div className="input-agent-pill model-active" style={{ pointerEvents: 'auto', cursor: 'default' }}>⚡ Llama 3.3 (Code & Chat)</div>
                   </div>
                   <button className="send-btn" onClick={homeSubmit}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
@@ -292,8 +228,7 @@ export default function Page() {
               <div className="ctop-info">
                 <div className="ctop-name">KORDEX AI</div>
                 <div className="ctop-row">
-                  <span className={`mpill ${isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('llama-3.3-70b-versatile')}>⚡ Llama 3.3 (Code & Chat)</span>
-                  <span className={`mpill ${!isLlama ? 'model-active' : ''}`} style={{ cursor: 'pointer' }} onClick={() => setModel('meta-llama/llama-4-scout-17b-16e-instruct')}>👁 Llama Scout (Vision & PDF)</span>
+                  <span className="mpill model-active" style={{ cursor: 'default' }}>⚡ Llama 3.3 (Code & Chat)</span>
                   <span className={`spill ${status.cls}`}><span className="sdot" /><span>{status.label}</span></span>
                 </div>
               </div>
@@ -311,6 +246,7 @@ export default function Page() {
                     <div className="mwho">{m.role === 'agent' ? 'KORDEX AI' : 'You'}</div>
                     {m.tools && m.tools.length > 0 && <div className="trow">{m.tools.map((t, j) => <span key={j} className="tpill">{t}</span>)}</div>}
                     {m.attachments && m.attachments.length > 0 && m.attachments.map((a, j) => <div key={j} className="file-attach">📄 {a}</div>)}
+                    {m.previews && m.previews.length > 0 && <div className="preview-row">{m.previews.map((p, j) => <img key={j} className="preview-img" src={p} alt={`Upload ${j + 1}`} />)}</div>}
                     <div className="bubble" dangerouslySetInnerHTML={{ __html: m.html }} />
                   </div>
                 </div>
@@ -345,23 +281,12 @@ export default function Page() {
             <div className={`scrbtn ${showScroll ? 'show' : ''}`} onClick={scrollBottom}>↓</div>
 
             <div className="ciarea">
-              <div className={`chat-file-strip ${chatFiles.length > 0 ? 'show' : ''}`}>
-                {chatFiles.map((f, i) => (
-                  <div key={i} className="file-chip">📄 {f.name} <span className="fc-remove" onClick={() => setChatFiles(cf => cf.filter((_, j) => j !== i))}>✕</span></div>
-                ))}
-              </div>
               <div className="cglass">
                 <div className="cglass-top">
                   <textarea ref={chatInpRef} id="chatInp" placeholder="Ask anything about code…" rows={1}
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } }}
                     onInput={e => autoResize(e.currentTarget, 130)} />
                   <button className="csend" disabled={busy} onClick={sendMsg}>↑</button>
-                </div>
-                <div className="cglass-footer">
-                  <div className="cglass-footer-l">
-                    <button className="icon-btn" onClick={() => chatFileRef.current?.click()} title="Attach file">📎</button>
-                    <input ref={chatFileRef} type="file" id="chatFileInput" multiple accept=".txt,.py,.js,.ts,.jsx,.tsx,.html,.css,.json,.md,.csv,.pdf,.png,.jpg,.jpeg" onChange={e => handleChatFiles(e.currentTarget)} style={{ display: 'none' }} />
-                  </div>
                 </div>
                 <div className="chat-chips">
                   {[

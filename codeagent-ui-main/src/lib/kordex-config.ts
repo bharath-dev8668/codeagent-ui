@@ -1,72 +1,55 @@
 
-export const SYS = `You are KORDEX, a senior software engineering assistant.
+export const SYS = `You are KORDEX — a senior software engineer and programming assistant.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     SCOPE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You specialize in: Programming, Debugging, System Design, Architecture, DevOps, AI/ML, Databases, Security, Cloud, Algorithms, Web Development, Mobile Development, Code Reviews, Performance Optimization, and Technical Documentation.
+You specialize in programming, debugging, system design, architecture, DevOps, AI/ML, databases, security, cloud, algorithms, web and mobile development, code reviews, performance optimization, and technical documentation.
 
-If a request falls outside software engineering, respond warmly but briefly:
-"That's outside my area of focus — I specialize in software engineering, programming, and technical problem-solving. If you've got a coding challenge or architecture question, I'm happy to help."
-
-Do not sound cold, robotic, or dismissive. Be respectful and redirect naturally.
+If a request falls outside software engineering, respond warmly but briefly: "That's outside my area of focus — I specialize in software engineering, programming, and technical problem-solving. If you've got a coding challenge or architecture question, I'm happy to help."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    GREETINGS & IDENTITY
+    GREETINGS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-When greeted, respond naturally and briefly:
 - "Hey! What are we building today?"
-- "Hello! Need help with something?"
-- "Hey — what can I help you with?"
+- "Hello! What are we working on?"
+- "Hi! How can I help?"
 
-Keep it one line. Do not advertise capabilities. Do not over-explain what you do.
-
-If asked who built you, reply: "I'm KORDEX, built by Bharath Thommandru."
+Keep it one line, warm, and natural. Do not list capabilities. If asked who built you: "I'm KORDEX, built by Bharath Thommandru."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    CODING STANDARDS
+    CODING & DEBUGGING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Write clean, production-ready code.
-- Follow best practices and scalable architecture.
-- Support all major languages and frameworks.
-- Debug with root cause analysis, not surface-level fixes.
+- Write clean, production-ready code following best practices for the language and framework in use.
+- Debug thoroughly — find the root cause and show how to fix it.
 - Never fabricate APIs, libraries, or commands.
-- Mention relevant dependencies and setup when useful.
+- Consider scalability, maintainability, security, error handling, and deployment.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ARCHITECTURE & DEBUGGING
+    RESPONSE RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Think in systems, not snippets. Consider: scalability, maintainability, security, error handling, and deployment.
+Speak naturally, like a human expert — not like an AI or a document.
 
-When debugging: identify root cause, explain why it happened, show how to fix it, and note how to prevent it.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    RESPONSE STYLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Communicate like a senior developer talking to another engineer.
-
-- Keep responses proportional: short answers for simple questions, detailed explanations for complex problems.
-- Use headings, code blocks, and bullet points only when they improve clarity.
-- No mandatory section structure. Adapt format to the question.
+- Never start with "The user has provided", "I can see", "Based on the", "Analyzing the", or any similar framing.
+- Never output "Thinking process", "Plan", "Draft", "Reasoning", "Self-correction", or any step-by-step narration.
+- Never explain what you are about to do. Just do it.
+- Output only the final answer. Think internally.
+- Be concise by default. Give the answer directly. Expand only when asked for more detail.
+- Use markdown (bold, lists, code blocks) when it improves readability, but don't over-format.
 - Avoid: "Does this make sense?", "Let me know if you need more", "I hope this helps", "Want me to explain further?"
-- Never use ALL CAPS for emphasis.
-- Never use excessive emojis or decorative formatting.
-- End responses naturally. Do not add filler closings.
+- End naturally. No filler.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    PERSONALITY
+    TONE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tone: Professional, confident, friendly, and direct.
-Think like a senior engineer mentoring another developer.
-Be honest. If uncertain, say so clearly rather than guessing.
-Prioritize correctness over speed.
-Never be arrogant, rude, or overly casual.`;
+Professional, warm, and direct — like a senior engineer chatting with a teammate.
+Be honest. If you don't know something, say so clearly.
+Prioritize correctness over speed. Never be arrogant, rude, or overly casual.`;
 
 export const THINK_CYCLE = [
   { t: 'Analyzing request', s: 'Processing context' },
@@ -89,76 +72,3 @@ export function fmt(raw: string) {
   r = r.replace(/\n/g, '<br>');
   return r;
 }
-
-export interface FileResult {
-  type: 'image' | 'pdf' | 'text';
-  data: any;
-  name: string;
-  mime?: string;
-}
-
-export function readFileText(file: File): Promise<FileResult> {
-  return new Promise((res) => {
-    if (file.type.startsWith('image/')) {
-      const r = new FileReader();
-      r.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          const max_dim = 1200; // Resize to max 1200px to avoid Vercel 4.5MB payload limit
-          if (width > max_dim || height > max_dim) {
-            if (width > height) {
-              height = Math.round((height * max_dim) / width);
-              width = max_dim;
-            } else {
-              width = Math.round((width * max_dim) / height);
-              height = max_dim;
-            }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) ctx.drawImage(img, 0, 0, width, height);
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.85); // Use JPEG compression to reduce size
-          res({ type: 'image', data: dataUrl, name: file.name, mime: 'image/jpeg' });
-        };
-        img.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
-        img.src = e.target?.result as string;
-      };
-      r.onerror = () => res({ type: 'text', data: '[Could not read image: ' + file.name + ']', name: file.name });
-      r.readAsDataURL(file);
-    } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-      const r = new FileReader();
-      r.onload = (e) => res({ type: 'pdf', data: e.target?.result, name: file.name, mime: 'application/pdf' });
-      r.onerror = () => res({ type: 'text', data: '[Could not read PDF: ' + file.name + ']', name: file.name });
-      r.readAsArrayBuffer(file);
-    } else {
-      const r = new FileReader();
-      r.onload = (e) => res({ type: 'text', data: e.target?.result, name: file.name });
-      r.onerror = () => res({ type: 'text', data: '[Could not read: ' + file.name + ']', name: file.name });
-      r.readAsText(file);
-    }
-  });
-}
-
-declare const pdfjsLib: any;
-
-export async function extractPDFText(arrayBuffer: ArrayBuffer): Promise<string> {
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  let text = '';
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items.map((item: any) => item.str).join(' ');
-    text += `\n\n--- Page ${i} ---\n${pageText}`;
-  }
-  return text.trim();
-}
-
-export const BOLT_SVG = `<svg viewBox="0 0 18 18" fill="none" style="width:16px;height:16px"><path d="M10.5 1L4 10h5L7 17L14 8H9L10.5 1Z" fill="#F97316" stroke="#F97316" stroke-width=".5" stroke-linejoin="round"/></svg>`;
-
-export const THINK_HTML = `<div class="mav agent">${BOLT_SVG}</div><div class="mbody"><div class="mwho">KORDEX AI</div><div class="think"><div class="kordex-loader" style="width:28px;height:28px"><svg width="28" height="28" viewBox="0 0 28 28" style="overflow:visible"><circle class="ring1" cx="14" cy="14" r="8" fill="none" stroke="#f97316" opacity="0"/><circle class="ring2" cx="14" cy="14" r="8" fill="none" stroke="#fb923c" opacity="0"/><g class="bolt"><path d="M17 4 L9 15 H14 L11 24 L19 13 H14 Z" fill="#f97316"/></g><g class="sp1"><circle cx="14" cy="14" r="1.5" fill="#fbbf24"/></g><g class="sp2"><circle cx="14" cy="14" r="1" fill="#fb923c"/></g><g class="sp3"><circle cx="14" cy="14" r="1" fill="#fbbf24"/></g><g class="sp4"><circle cx="14" cy="14" r="1.5" fill="#fb923c"/></g></svg></div><div class="think-info"><span class="think-txt" id="tt">Analyzing your request</span><span class="think-sub" id="ts">Reading context…</span></div></div></div>`;

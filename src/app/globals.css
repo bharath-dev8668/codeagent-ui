@@ -1979,6 +1979,54 @@ body {
   display: none
 }
 
+/* ── DROP ZONE ── */
+.drop-zone {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 5, 30, .85);
+  backdrop-filter: blur(8px);
+  border: 2px dashed rgba(168, 85, 247, .4);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.home.drag-over,
+.chat-msgs.drag-over {
+  position: relative;
+}
+
+.drop-zone-inner {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(192, 132, 252, .7);
+  padding: 20px;
+  border: 1px dashed rgba(168, 85, 247, .25);
+  border-radius: 12px;
+  background: rgba(168, 85, 247, .05);
+}
+
+/* ── IMAGE PREVIEW ── */
+.preview-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.preview-img {
+  width: auto;
+  height: 80px;
+  max-width: 140px;
+  border-radius: 8px;
+  border: 1px solid rgba(124, 58, 237, .15);
+  object-fit: cover;
+  background: rgba(0, 0, 0, .3);
+}
+
 .cchip {
   flex-shrink: 0;
   display: inline-flex;
