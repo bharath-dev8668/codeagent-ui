@@ -3,3 +3,5 @@ node_modules/
 .env
 dist/
 .env.local
+codeagent-ui-main/
+my-app/
